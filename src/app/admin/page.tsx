@@ -134,14 +134,21 @@ export default function AdminOverviewPage() {
           <div className="text-[11px] text-[#94A3B8] mt-1">Awaiting email click</div>
         </div>
 
-        <div className="p-4 bg-[#14171F] border border-[#2A303C] rounded-2xl shadow-lg col-span-2 sm:col-span-1">
+        <Link
+          href="/admin/members?status=EXPIRING_SOON"
+          className="p-4 bg-[#14171F] hover:bg-[#1D222E] border border-[#2A303C] hover:border-amber-500/50 rounded-2xl shadow-lg col-span-2 sm:col-span-1 transition block group"
+          title="Click to view expiring members and send WhatsApp reminders"
+        >
           <div className="flex items-center justify-between text-[#94A3B8] mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Expiring (7d)</span>
+            <span className="text-xs font-bold uppercase tracking-wider group-hover:text-amber-400 transition">Expiring (7d)</span>
             <AlertTriangle className="w-4 h-4 text-amber-400" />
           </div>
           <div className="text-3xl font-black text-amber-400">{stats?.expiringSoon ?? 0}</div>
-          <div className="text-[11px] text-[#94A3B8] mt-1">Require renewal</div>
-        </div>
+          <div className="text-[11px] text-[#94A3B8] mt-1 flex items-center justify-between">
+            <span>Require renewal</span>
+            <span className="text-[10px] text-amber-400/80 font-bold group-hover:underline">WhatsApp →</span>
+          </div>
+        </Link>
       </div>
 
       {/* Operational Modules Grid */}

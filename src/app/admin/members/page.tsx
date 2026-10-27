@@ -16,9 +16,11 @@ import {
   X,
   MoreVertical,
   Flame,
-  ArrowRight
+  ArrowRight,
+  MessageCircle
 } from 'lucide-react';
 import clsx from 'clsx';
+import { WhatsAppRenewalModal } from './WhatsAppRenewalModal.tsx';
 import { CSRF_COOKIE_NAME, CSRF_HEADER_NAME } from '../../../presentation/security/cookie-constants.ts';
 
 interface MemberItem {
@@ -79,9 +81,16 @@ function MembersContent() {
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
 
+  // WhatsApp Renewal Modal
+  const [whatsAppMember, setWhatsAppMember] = useState<MemberItem | null>(null);
+
   useEffect(() => {
     if (searchParams.get('invite') === 'true') {
       setShowInviteModal(true);
+    }
+    const initialStatus = searchParams.get('status');
+    if (initialStatus) {
+      setStatusFilter(initialStatus);
     }
     // Set default dates for invite
     const now = new Date();
@@ -98,12 +107,24 @@ function MembersContent() {
     try {
       const query = new URLSearchParams();
       if (search) query.set('search', search);
-      if (statusFilter) query.set('status', statusFilter);
+      if (statusFilter && statusFilter !== 'EXPIRING_SOON') {
+        query.set('status', statusFilter);
+      }
 
       const res = await fetch(`/api/admin/members?${query.toString()}`);
       if (res.ok) {
         const data = await res.json();
-        setMembers(data.data || []);
+        let list: MemberItem[] = data.data || [];
+        if (statusFilter === 'EXPIRING_SOON') {
+          list = list.filter(
+            (m) =>
+              m.membership &&
+              m.membership.daysRemaining !== undefined &&
+              m.membership.daysRemaining <= 7 &&
+              m.membership.daysRemaining >= 0
+          );
+        }
+        setMembers(list);
       }
     } catch (err) {
       console.error('Failed to load members:', err);
@@ -223,9 +244,9 @@ function MembersContent() {
             setGeneratedInviteUrl(null);
             setInviteError(null);
           }}
-          className="px-4 py-2.5 bg-[#FF5500] hover:bg-[#E04B00] text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(255,85,0,0.3)] transition shrink-0"
+          className="px-4 py-2.5 bg-[#CADA03] hover:bg-[#B8C702] text-[#0A0B0E] font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(202,218,3,0.3)] transition shrink-0 uppercase"
         >
-          <UserPlus className="w-4 h-4" />
+          <UserPlus className="w-4 h-4 text-[#0A0B0E]" />
           <span>Invite New Member</span>
         </button>
       </div>
@@ -239,23 +260,32 @@ function MembersContent() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name, email..."
-            className="w-full pl-10 pr-4 py-2.5 bg-[#14171F] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-[#F8F9FA] placeholder-[#94A3B8]/50 outline-none text-xs"
+            className="w-full pl-10 pr-4 py-2.5 bg-[#14171F] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-[#F8F9FA] placeholder-[#94A3B8]/50 outline-none text-xs"
           />
         </div>
 
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 text-xs">
-          {['', 'ACTIVE', 'PENDING_VERIFICATION', 'INVITED', 'SUSPENDED'].map((st) => (
+          {[
+            { id: '', label: 'ALL MEMBERS' },
+            { id: 'EXPIRING_SOON', label: 'EXPIRING SOON (7D)' },
+            { id: 'ACTIVE', label: 'ACTIVE' },
+            { id: 'PENDING_VERIFICATION', label: 'PENDING' },
+            { id: 'INVITED', label: 'INVITED' },
+            { id: 'SUSPENDED', label: 'SUSPENDED' },
+          ].map((st) => (
             <button
-              key={st}
-              onClick={() => setStatusFilter(st)}
+              key={st.id}
+              onClick={() => setStatusFilter(st.id)}
               className={clsx(
                 'px-3 py-2 rounded-xl font-bold whitespace-nowrap transition text-[11px]',
-                statusFilter === st
-                  ? 'bg-[#1D222E] text-[#FF5500] border border-[#FF5500]/40'
+                statusFilter === st.id
+                  ? st.id === 'EXPIRING_SOON'
+                    ? 'bg-amber-950/60 text-amber-400 border border-amber-500/50 shadow-[0_2px_8px_rgba(251,191,36,0.25)]'
+                    : 'bg-[#1D222E] text-[#CADA03] border border-[#CADA03]/40 shadow-[0_2px_8px_rgba(202,218,3,0.25)]'
                   : 'bg-[#14171F] text-[#94A3B8] hover:text-[#F8F9FA] border border-[#2A303C]'
               )}
             >
-              {st || 'ALL MEMBERS'}
+              {st.label}
             </button>
           ))}
         </div>
@@ -278,7 +308,7 @@ function MembersContent() {
               {loading ? (
                 <tr>
                   <td colSpan={5} className="py-8 text-center text-[#94A3B8]">
-                    <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[#FF5500]" />
+                    <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[#CADA03]" />
                     <span>Loading members...</span>
                   </td>
                 </tr>
@@ -333,7 +363,7 @@ function MembersContent() {
 
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1 text-[#FF5500] font-bold">
+                        <div className="flex items-center gap-1 text-[#CADA03] font-bold">
                           <Flame className="w-3.5 h-3.5" />
                           <span>{m.streak.current}d</span>
                         </div>
@@ -343,20 +373,33 @@ function MembersContent() {
                     </td>
 
                     <td className="py-3.5 px-4 text-right">
-                      {m.membership && (
-                        <button
-                          onClick={() => {
-                            setSelectedMember(m);
-                            setActionType('RENEW');
-                            setActionError(null);
-                            setActionSuccess(null);
-                            setActionReason('');
-                          }}
-                          className="px-2.5 py-1.5 bg-[#1D222E] hover:bg-[#2A303C] text-[#FF5500] hover:text-white rounded-lg text-[11px] font-bold border border-[#2A303C] transition"
-                        >
-                          Manage Plan
-                        </button>
-                      )}
+                      <div className="flex items-center justify-end gap-1.5">
+                        {m.membership && (
+                          <button
+                            onClick={() => setWhatsAppMember(m)}
+                            className="p-1.5 bg-[#25D366]/15 hover:bg-[#25D366]/30 border border-[#25D366]/40 text-[#25D366] rounded-xl transition flex items-center gap-1"
+                            title="Compose 1-Click WhatsApp Renewal Reminder"
+                          >
+                            <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                            <span className="hidden xl:inline text-[10px] font-bold">WhatsApp</span>
+                          </button>
+                        )}
+
+                        {m.membership && (
+                          <button
+                            onClick={() => {
+                              setSelectedMember(m);
+                              setActionType('RENEW');
+                              setActionError(null);
+                              setActionSuccess(null);
+                              setActionReason('');
+                            }}
+                            className="px-2.5 py-1.5 bg-[#1D222E] hover:bg-[#2A303C] text-[#CADA03] hover:text-white rounded-xl text-[11px] font-bold border border-[#2A303C] transition"
+                          >
+                            Manage Plan
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -510,7 +553,7 @@ function MembersContent() {
                       required
                       value={inviteExpiryDate}
                       onChange={(e) => setInviteExpiryDate(e.target.value)}
-                      className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-xs text-[#F8F9FA] outline-none font-mono"
+                      className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-xs text-[#F8F9FA] outline-none font-mono"
                     />
                   </div>
                 </div>
@@ -526,9 +569,9 @@ function MembersContent() {
                   <button
                     type="submit"
                     disabled={inviting}
-                    className="px-4 py-2 bg-[#FF5500] hover:bg-[#E04B00] text-xs font-bold text-white rounded-xl flex items-center gap-1.5 disabled:opacity-50"
+                    className="px-4 py-2 bg-[#CADA03] hover:bg-[#B8C702] text-xs font-black text-[#0A0B0E] rounded-xl flex items-center gap-1.5 disabled:opacity-50 uppercase"
                   >
-                    {inviting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                    {inviting && <Loader2 className="w-3.5 h-3.5 animate-spin text-[#0A0B0E]" />}
                     <span>Generate Secure Link</span>
                   </button>
                 </div>
@@ -556,6 +599,26 @@ function MembersContent() {
               Current Plan: {selectedMember.membership.planName} (Exp: {selectedMember.membership.expiryDate})
             </p>
 
+            {/* Quick WhatsApp Reminder Action */}
+            <div className="mb-4 p-3.5 bg-[#0A0B0E] border border-[#25D366]/35 rounded-2xl flex items-center justify-between shadow-inner">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[#25D366]/15 flex items-center justify-center text-[#25D366]">
+                  <MessageCircle className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-[#F8F9FA]">WhatsApp Renewal Prompt</div>
+                  <div className="text-[10px] text-[#94A3B8]">Send pre-filled renewal notice to {selectedMember.fullName.split(' ')[0]}</div>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setWhatsAppMember(selectedMember)}
+                className="px-3 py-1.5 bg-[#25D366] hover:bg-[#20BD5A] text-[#0A0B0E] font-black rounded-xl text-[10px] uppercase flex items-center gap-1.5 transition shadow-[0_2px_8px_rgba(37,211,102,0.3)]"
+              >
+                <span>Compose</span>
+              </button>
+            </div>
+
             {actionError && (
               <div className="mb-4 p-3 bg-red-950/40 border border-red-500/40 rounded-xl text-red-200 text-xs">
                 {actionError}
@@ -579,9 +642,9 @@ function MembersContent() {
                       key={act}
                       onClick={() => setActionType(act)}
                       className={clsx(
-                        'py-2 rounded-xl text-[11px] font-bold border transition',
+                        'py-2 rounded-xl text-[11px] font-bold border transition uppercase',
                         actionType === act
-                          ? 'bg-[#FF5500] text-white border-[#FF5500]'
+                          ? 'bg-[#CADA03] text-[#0A0B0E] border-[#CADA03] font-black shadow-[0_2px_8px_rgba(202,218,3,0.3)]'
                           : 'bg-[#0A0B0E] text-[#94A3B8] border-[#2A303C] hover:text-[#F8F9FA]'
                       )}
                     >
@@ -601,7 +664,7 @@ function MembersContent() {
                     required
                     value={newExpiryDate}
                     onChange={(e) => setNewExpiryDate(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-xs text-[#F8F9FA] outline-none font-mono"
+                    className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-xs text-[#F8F9FA] outline-none font-mono"
                   />
                 </div>
               )}
@@ -616,7 +679,7 @@ function MembersContent() {
                   value={actionReason}
                   onChange={(e) => setActionReason(e.target.value)}
                   placeholder="e.g. Paid in full for monthly renewal at reception; or Suspended per athlete medical leave."
-                  className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-xs text-[#F8F9FA] outline-none"
+                  className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-xs text-[#F8F9FA] outline-none"
                 />
               </div>
 
@@ -631,9 +694,9 @@ function MembersContent() {
                 <button
                   type="submit"
                   disabled={actionLoading || !actionReason}
-                  className="px-4 py-2 bg-[#FF5500] hover:bg-[#E04B00] text-xs font-bold text-white rounded-xl flex items-center gap-1.5 disabled:opacity-50"
+                  className="px-4 py-2 bg-[#CADA03] hover:bg-[#B8C702] text-xs font-black text-[#0A0B0E] rounded-xl flex items-center gap-1.5 disabled:opacity-50 uppercase"
                 >
-                  {actionLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                  {actionLoading && <Loader2 className="w-3.5 h-3.5 animate-spin text-[#0A0B0E]" />}
                   <span>Apply & Audit Log</span>
                 </button>
               </div>
@@ -641,6 +704,13 @@ function MembersContent() {
           </div>
         </div>
       )}
+
+      {/* WhatsApp Renewal Generator Modal */}
+      <WhatsAppRenewalModal
+        isOpen={!!whatsAppMember}
+        onClose={() => setWhatsAppMember(null)}
+        member={whatsAppMember}
+      />
     </div>
   );
 }
