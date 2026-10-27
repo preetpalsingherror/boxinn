@@ -1,0 +1,293 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// -------------------------------------------------------------
+// Enums
+// -------------------------------------------------------------
+
+enum UserRole {
+  MEMBER
+  ADMIN
+
+  @@map("user_role")
+}
+
+enum UserStatus {
+  INVITED
+  PENDING_VERIFICATION
+  ACTIVE
+  SUSPENDED
+
+  @@map("user_status")
+}
+
+enum InvitationStatus {
+  PENDING
+  CLAIMED
+  EXPIRED
+  REVOKED
+
+  @@map("invitation_status")
+}
+
+enum MembershipStatus {
+  ACTIVE
+  SUSPENDED
+  FROZEN
+  CANCELLED
+
+  @@map("membership_status")
+}
+
+enum CheckinSource {
+  ENTRANCE_QR
+  ADMIN_MANUAL
+
+  @@map("checkin_source")
+}
+
+// -------------------------------------------------------------
+// Identity, Authentication & Sessions
+// -------------------------------------------------------------
+
+model User {
+  id              String        @id @default(uuid()) @db.Uuid
+  email           String        @unique @db.VarChar(255)
+  phone           String?       @unique @db.VarChar(32)
+  fullName        String        @map("full_name") @db.VarChar(128)
+  passwordHash    String?       @map("password_hash") @db.VarChar(255)
+  role            UserRole      @default(MEMBER)
+  status          UserStatus    @default(INVITED)
+  emailVerifiedAt DateTime?     @map("email_verified_at") @db.Timestamptz
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime      @updatedAt @map("updated_at") @db.Timestamptz
+
+  sessions                Session[]
+  memberships             Membership[]
+  attendanceRecords       AttendanceRecord[]
+  streak                  MemberStreak?
+  emailVerificationTokens EmailVerificationToken[]
+  passwordResetTokens     PasswordResetToken[]
+  
+  // Administrative relations (Restricted deletions to permanently preserve audit logs)
+  createdInvitations     Invitation[]             @relation("AdminInvitations")
+  membershipAudits       MembershipAudit[]        @relation("AdminMembershipAudits")
+  attendanceCorrections  AttendanceCorrection[]   @relation("AdminAttendanceCorrections")
+  createdAnnouncements   Announcement[]           @relation("AdminAnnouncements")
+
+  @@index([role, status])
+  @@map("users")
+}
+
+model Session {
+  id               String    @id @default(uuid()) @db.Uuid
+  userId           String    @map("user_id") @db.Uuid
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionTokenHash String    @unique @map("session_token_hash") @db.VarChar(64)
+  ipAddress        String?   @map("ip_address") @db.VarChar(45)
+  userAgent        String?   @map("user_agent") @db.VarChar(512)
+  expiresAt        DateTime  @map("expires_at") @db.Timestamptz
+  revokedAt        DateTime? @map("revoked_at") @db.Timestamptz
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([userId, revokedAt, expiresAt])
+  @@map("sessions")
+}
+
+model Invitation {
+  id          String           @id @default(uuid()) @db.Uuid
+  email       String           @db.VarChar(255)
+  tokenHash   String           @unique @map("token_hash") @db.VarChar(64)
+  status      InvitationStatus @default(PENDING)
+  invitedById String           @map("invited_by_id") @db.Uuid
+  invitedBy   User             @relation("AdminInvitations", fields: [invitedById], references: [id], onDelete: Restrict)
+  expiresAt   DateTime         @map("expires_at") @db.Timestamptz
+  acceptedAt  DateTime?        @map("accepted_at") @db.Timestamptz
+  createdAt   DateTime         @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([tokenHash, status, expiresAt])
+  @@map("invitations")
+}
+
+model EmailVerificationToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique @map("token_hash") @db.VarChar(64)
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz
+  usedAt    DateTime? @map("used_at") @db.Timestamptz
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([tokenHash, usedAt, expiresAt])
+  @@index([userId])
+  @@map("email_verification_tokens")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique @map("token_hash") @db.VarChar(64)
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz
+  usedAt    DateTime? @map("used_at") @db.Timestamptz
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([tokenHash, usedAt, expiresAt])
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model RateLimitBucket {
+  key         String   @id @db.VarChar(128)
+  count       Int      @default(1)
+  windowStart DateTime @default(now()) @map("window_start") @db.Timestamptz
+  expiresAt   DateTime @map("expires_at") @db.Timestamptz
+
+  @@map("rate_limit_buckets")
+}
+
+// -------------------------------------------------------------
+// Membership & Renewals
+// -------------------------------------------------------------
+
+model Membership {
+  id               String           @id @default(uuid()) @db.Uuid
+  userId           String           @map("user_id") @db.Uuid
+  user             User             @relation(fields: [userId], references: [id], onDelete: Restrict)
+  planName         String           @map("plan_name") @db.VarChar(64)
+  startDate        String           @map("start_date") @db.VarChar(10) // YYYY-MM-DD
+  expiryDate       String           @map("expiry_date") @db.VarChar(10) // YYYY-MM-DD
+  status           MembershipStatus @default(ACTIVE)
+  suspensionReason String?          @map("suspension_reason") @db.Text
+  notes            String?          @db.Text
+  createdAt        DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime         @updatedAt @map("updated_at") @db.Timestamptz
+
+  audits           MembershipAudit[]
+
+  @@index([userId, status])
+  @@index([expiryDate])
+  @@map("memberships")
+}
+
+model MembershipAudit {
+  id                 String     @id @default(uuid()) @db.Uuid
+  membershipId       String     @map("membership_id") @db.Uuid
+  membership         Membership @relation(fields: [membershipId], references: [id], onDelete: Restrict)
+  adminId            String     @map("admin_id") @db.Uuid
+  admin              User       @relation("AdminMembershipAudits", fields: [adminId], references: [id], onDelete: Restrict)
+  action             String     @db.VarChar(64)
+  beforeState        String?    @map("before_state") @db.Text
+  afterState         String     @map("after_state") @db.Text
+  reason             String     @db.Text
+  createdAt          DateTime   @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("membership_audits")
+}
+
+// -------------------------------------------------------------
+// Attendance & Streak Engine
+// -------------------------------------------------------------
+
+model AttendanceRecord {
+  id           String        @id @default(uuid()) @db.Uuid
+  userId       String        @map("user_id") @db.Uuid
+  user         User          @relation(fields: [userId], references: [id], onDelete: Restrict)
+  gymDate      String        @map("gym_date") @db.VarChar(10) // YYYY-MM-DD
+  checkInTime  DateTime      @map("check_in_time") @db.Timestamptz
+  checkOutTime DateTime?     @map("check_out_time") @db.Timestamptz
+  source       CheckinSource @default(ENTRANCE_QR)
+  isAutoClosed Boolean       @default(false) @map("is_auto_closed")
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz
+
+  corrections  AttendanceCorrection[]
+
+  @@unique([userId, gymDate])
+  @@index([gymDate])
+  @@map("attendance_records")
+}
+
+model MemberStreak {
+  userId             String   @id @map("user_id") @db.Uuid
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currentStreak      Int      @default(0) @map("current_streak")
+  longestStreak      Int      @default(0) @map("longest_streak")
+  lastAttendanceDate String?  @map("last_attendance_date") @db.VarChar(10)
+  streakStartDate    String?  @map("streak_start_date") @db.VarChar(10)
+  updatedAt          DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("member_streaks")
+}
+
+model AttendanceCorrection {
+  id                 String           @id @default(uuid()) @db.Uuid
+  attendanceRecordId String           @map("attendance_record_id") @db.Uuid
+  attendanceRecord   AttendanceRecord @relation(fields: [attendanceRecordId], references: [id], onDelete: Restrict)
+  adminId            String           @map("admin_id") @db.Uuid
+  admin              User             @relation("AdminAttendanceCorrections", fields: [adminId], references: [id], onDelete: Restrict)
+  originalGymDate    String           @map("original_gym_date") @db.VarChar(10)
+  correctedGymDate   String           @map("corrected_gym_date") @db.VarChar(10)
+  beforeState        String?          @map("before_state") @db.Text
+  afterState         String           @map("after_state") @db.Text
+  reason             String           @db.Text
+  createdAt          DateTime         @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("attendance_corrections")
+}
+
+// -------------------------------------------------------------
+// Facility & Content Guides
+// -------------------------------------------------------------
+
+model Machine {
+  id          String     @id @default(uuid()) @db.Uuid
+  code        String     @unique @db.VarChar(32)
+  name        String     @db.VarChar(128)
+  category    String     @db.VarChar(64)
+  location    String?    @db.VarChar(64)
+  description String?    @db.Text
+  imageUrl    String?    @map("image_url") @db.VarChar(512)
+  isActive    Boolean    @default(true) @map("is_active")
+  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamptz
+
+  exercises   Exercise[]
+
+  @@map("machines")
+}
+
+model Exercise {
+  id                String   @id @default(uuid()) @db.Uuid
+  machineId         String?  @map("machine_id") @db.Uuid
+  machine           Machine? @relation(fields: [machineId], references: [id], onDelete: SetNull)
+  title             String   @db.VarChar(128)
+  targetMuscleGroup String   @map("target_muscle_group") @db.VarChar(64)
+  difficulty        String   @default("ALL_LEVELS") @db.VarChar(32)
+  instructions      String   @db.Text
+  formCues          String   @map("form_cues") @db.Text
+  safetyPrecautions String?  @map("safety_precautions") @db.Text
+  videoUrl          String?  @map("video_url") @db.VarChar(512)
+  trainerName       String?  @map("trainer_name") @db.VarChar(64)
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("exercises")
+}
+
+model Announcement {
+  id          String    @id @default(uuid()) @db.Uuid
+  title       String    @db.VarChar(255)
+  content     String    @db.Text
+  isUrgent    Boolean   @default(false) @map("is_urgent")
+  createdById String    @map("created_by_id") @db.Uuid
+  createdBy   User      @relation("AdminAnnouncements", fields: [createdById], references: [id], onDelete: Restrict)
+  publishedAt DateTime  @default(now()) @map("published_at") @db.Timestamptz
+  expiresAt   DateTime? @map("expires_at") @db.Timestamptz
+
+  @@map("announcements")
+}
