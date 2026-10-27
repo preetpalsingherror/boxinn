@@ -2,7 +2,7 @@ import { prisma } from '../../infrastructure/db/client.ts';
 import { toGymLocalDate } from '../../domain/common/date-utils.ts';
 import { checkMembershipAccess } from '../../domain/membership/membership-status.ts';
 import type { MembershipRecord } from '../../domain/membership/membership-status.ts';
-import { handleDuplicateScan, evaluateSessionClosure } from '../../domain/attendance/session-closure.policy.ts';
+import { handleDuplicateScan, evaluateSessionClosure, SESSION_DURATION_MS } from '../../domain/attendance/session-closure.policy.ts';
 import { calculateStreakOnAttendance, recalculateFullStreak } from '../../domain/streak/streak-calculator.ts';
 import type { StreakState } from '../../domain/streak/streak-calculator.ts';
 
@@ -285,6 +285,47 @@ export class AttendanceService {
         AND "check_in_time" + INTERVAL '3 hours' <= ${now};
     `;
     return result;
+  }
+
+  /**
+   * Calculates real-time gym floor occupancy count.
+   * Calculated from check-ins recorded today (Asia/Kolkata) where session auto-close (3 hours)
+   * has not elapsed and member has not manually checked out.
+   */
+  async getLiveOccupancy(): Promise<{
+    count: number;
+    gymDate: string;
+    asOf: string;
+    capacityNotice: string;
+  }> {
+    const now = new Date();
+    const gymDate = toGymLocalDate(now, 'Asia/Kolkata');
+    const threeHoursAgo = new Date(now.getTime() - SESSION_DURATION_MS);
+
+    const count = await prisma.attendanceRecord.count({
+      where: {
+        gymDate,
+        checkOutTime: null,
+        isAutoClosed: false,
+        checkInTime: {
+          gt: threeHoursAgo,
+        },
+      },
+    });
+
+    let capacityNotice = 'Calm & Spaced • Great time to train';
+    if (count >= 15) {
+      capacityNotice = 'Peak Training Hour • High Floor Energy';
+    } else if (count >= 6) {
+      capacityNotice = 'Moderate Activity • Rigs & Stations Ready';
+    }
+
+    return {
+      count,
+      gymDate,
+      asOf: now.toISOString(),
+      capacityNotice,
+    };
   }
 }
 

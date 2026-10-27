@@ -13,8 +13,10 @@ import {
   Copy, 
   Check,
   ExternalLink,
-  BookOpen
+  BookOpen,
+  Printer
 } from 'lucide-react';
+import { EquipmentPrintModal } from './EquipmentPrintModal.tsx';
 import { CSRF_COOKIE_NAME, CSRF_HEADER_NAME } from '../../../presentation/security/cookie-constants.ts';
 
 interface MachineItem {
@@ -59,8 +61,9 @@ export default function AdminMachinesPage() {
   const [guideSubmitting, setGuideSubmitting] = useState(false);
   const [guideError, setGuideError] = useState<string | null>(null);
 
-  // QR preview state
+  // QR preview & print state
   const [previewQrCode, setPreviewQrCode] = useState<string | null>(null);
+  const [showPrintModal, setShowPrintModal] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const loadMachines = async () => {
@@ -183,13 +186,24 @@ export default function AdminMachinesPage() {
           </p>
         </div>
 
-        <button
-          onClick={() => setShowAddMachine(true)}
-          className="px-4 py-2.5 bg-[#CADA03] hover:bg-[#B8C702] text-[#0A0B0E] font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(202,218,3,0.3)] transition shrink-0 uppercase"
-        >
-          <Plus className="w-4 h-4 text-[#0A0B0E]" />
-          <span>Add Machine Station</span>
-        </button>
+        <div className="flex items-center gap-2.5 shrink-0">
+          <button
+            onClick={() => setShowPrintModal(true)}
+            className="px-4 py-2.5 bg-[#1D222E] hover:bg-[#2A303C] border border-[#2A303C] hover:border-[#CADA03]/50 text-[#F8F9FA] hover:text-[#CADA03] font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition uppercase"
+            title="Generate printable sticker sheets for equipment"
+          >
+            <Printer className="w-4 h-4 text-[#CADA03]" />
+            <span>Print QR Labels</span>
+          </button>
+
+          <button
+            onClick={() => setShowAddMachine(true)}
+            className="px-4 py-2.5 bg-[#CADA03] hover:bg-[#B8C702] text-[#0A0B0E] font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(202,218,3,0.3)] transition uppercase"
+          >
+            <Plus className="w-4 h-4 text-[#0A0B0E]" />
+            <span>Add Machine Station</span>
+          </button>
+        </div>
       </div>
 
       {/* Machines List */}
@@ -580,6 +594,13 @@ export default function AdminMachinesPage() {
           </div>
         </div>
       )}
+
+      {/* Equipment Print Modal Sheet */}
+      <EquipmentPrintModal
+        isOpen={showPrintModal}
+        onClose={() => setShowPrintModal(false)}
+        machines={machines}
+      />
     </div>
   );
 }

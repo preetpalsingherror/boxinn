@@ -12,7 +12,9 @@ import {
   AlertCircle, 
   ArrowRight,
   ShieldCheck,
-  Megaphone
+  Megaphone,
+  Activity,
+  Users
 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -57,6 +59,8 @@ export default function MemberHomePage() {
   const [membership, setMembership] = useState<MembershipInfo | null>(null);
   const [streak, setStreak] = useState<StreakInfo>({ currentStreak: 0, longestStreak: 0, lastAttendanceDate: null });
   const [checkedInToday, setCheckedInToday] = useState(false);
+  const [liveOccupancy, setLiveOccupancy] = useState<number>(0);
+  const [occupancyNotice, setOccupancyNotice] = useState<string>('Calm & Spaced • Great time to train');
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -79,6 +83,12 @@ export default function MemberHomePage() {
           const histData = await histRes.json();
           setCheckedInToday(histData.data.checkedInToday);
           setStreak(histData.data.streak);
+          if (typeof histData.data.liveOccupancy === 'number') {
+            setLiveOccupancy(histData.data.liveOccupancy);
+            if (histData.data.occupancyNotice) {
+              setOccupancyNotice(histData.data.occupancyNotice);
+            }
+          }
         }
 
         if (annRes.ok) {
@@ -123,6 +133,30 @@ export default function MemberHomePage() {
         <div className="px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-[11px] font-bold text-emerald-400 flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
           <span>ENROLLED</span>
+        </div>
+      </div>
+
+      {/* Live Gym Floor Occupancy Banner */}
+      <div className="p-3.5 bg-[#14171F] border border-[#2A303C] hover:border-[#CADA03]/30 rounded-2xl flex items-center justify-between shadow-lg transition">
+        <div className="flex items-center gap-3">
+          <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-[#1D222E] border border-[#CADA03]/30 text-[#CADA03]">
+            <Activity className="w-4 h-4 text-[#CADA03]" />
+            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#CADA03] animate-ping" />
+            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#CADA03]" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-black uppercase tracking-wider text-[#F8F9FA]">
+                Live Gym Floor: <span className="text-[#CADA03] font-mono">{liveOccupancy} {liveOccupancy === 1 ? 'Athlete' : 'Athletes'}</span> Active
+              </span>
+            </div>
+            <p className="text-[11px] text-[#94A3B8] font-medium">
+              {occupancyNotice}
+            </p>
+          </div>
+        </div>
+        <div className="text-right hidden sm:block">
+          <span className="text-[10px] uppercase tracking-wider text-[#94A3B8] font-bold">Auto 3h window</span>
         </div>
       </div>
 

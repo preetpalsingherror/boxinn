@@ -49,7 +49,7 @@ async function main() {
     create: {
       email: 'preet@boxinn.local',
       fullName: 'Preetpal Singh',
-      phone: '+919876543299',
+      phone: '+919876543201',
       passwordHash: preetPasswordHash,
       role: 'MEMBER',
       status: 'ACTIVE',

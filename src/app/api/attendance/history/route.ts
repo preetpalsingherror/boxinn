@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server.js';
 import { requireAuth } from '../../../../presentation/security/auth-guard.ts';
 import { prisma } from '../../../../infrastructure/db/client.ts';
+import { attendanceService } from '../../../../application/services/attendance-service.ts';
 import { jsonSuccess } from '../../../../presentation/http/response.ts';
 import { toGymLocalDate } from '../../../../domain/common/date-utils.ts';
 import { evaluateActiveStreak } from '../../../../domain/streak/streak-calculator.ts';
@@ -15,22 +16,24 @@ export async function GET(req: NextRequest) {
   const today = toGymLocalDate(new Date(), 'Asia/Kolkata');
 
   // Fetch all attendance records in reverse chronological order
-  const records = await prisma.attendanceRecord.findMany({
-    where: { userId: user.id },
-    orderBy: { gymDate: 'desc' },
-    select: {
-      id: true,
-      gymDate: true,
-      checkInTime: true,
-      checkOutTime: true,
-      source: true,
-      isAutoClosed: true,
-    },
-  });
-
-  const streakRow = await prisma.memberStreak.findUnique({
-    where: { userId: user.id },
-  });
+  const [records, streakRow, occupancy] = await Promise.all([
+    prisma.attendanceRecord.findMany({
+      where: { userId: user.id },
+      orderBy: { gymDate: 'desc' },
+      select: {
+        id: true,
+        gymDate: true,
+        checkInTime: true,
+        checkOutTime: true,
+        source: true,
+        isAutoClosed: true,
+      },
+    }),
+    prisma.memberStreak.findUnique({
+      where: { userId: user.id },
+    }),
+    attendanceService.getLiveOccupancy(),
+  ]);
 
   // Calculate live streak evaluation against today
   const activeStreak = streakRow
@@ -56,6 +59,8 @@ export async function GET(req: NextRequest) {
   return jsonSuccess({
     totalVisits: records.length,
     checkedInToday,
+    liveOccupancy: occupancy.count,
+    occupancyNotice: occupancy.capacityNotice,
     streak: {
       currentStreak: streakRow ? streakRow.currentStreak : 0,
       displayStreak: activeStreak.displayStreak,

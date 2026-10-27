@@ -21,6 +21,8 @@ interface Stats {
   pendingVerifications: number;
   expiringSoon: number;
   machinesCount: number;
+  liveOccupancy?: number;
+  occupancyNotice?: string;
 }
 
 export default function AdminOverviewPage() {
@@ -92,7 +94,19 @@ export default function AdminOverviewPage() {
       </div>
 
       {/* Metrics Row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+        <div className="p-4 bg-[#14171F] border border-[#CADA03]/50 rounded-2xl shadow-lg relative overflow-hidden">
+          <div className="flex items-center justify-between text-[#94A3B8] mb-2">
+            <span className="text-xs font-black uppercase tracking-wider text-[#CADA03] flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#CADA03] animate-ping" />
+              Live Floor
+            </span>
+            <Activity className="w-4 h-4 text-[#CADA03]" />
+          </div>
+          <div className="text-3xl font-black text-[#CADA03]">{stats?.liveOccupancy ?? 0}</div>
+          <div className="text-[11px] text-[#94A3B8] mt-1 font-medium">{stats?.occupancyNotice ?? 'Active athletes right now'}</div>
+        </div>
+
         <div className="p-4 bg-[#14171F] border border-[#2A303C] rounded-2xl shadow-lg">
           <div className="flex items-center justify-between text-[#94A3B8] mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">Active Members</span>
@@ -120,7 +134,7 @@ export default function AdminOverviewPage() {
           <div className="text-[11px] text-[#94A3B8] mt-1">Awaiting email click</div>
         </div>
 
-        <div className="p-4 bg-[#14171F] border border-[#2A303C] rounded-2xl shadow-lg">
+        <div className="p-4 bg-[#14171F] border border-[#2A303C] rounded-2xl shadow-lg col-span-2 sm:col-span-1">
           <div className="flex items-center justify-between text-[#94A3B8] mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">Expiring (7d)</span>
             <AlertTriangle className="w-4 h-4 text-amber-400" />
