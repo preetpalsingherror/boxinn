@@ -11,7 +11,13 @@ export async function POST(req: NextRequest) {
       return jsonError('Invalid request payload. JSON object expected.', 400);
     }
 
-    const email = sanitizeString(body.email);
+    let email = sanitizeString(body.email).toLowerCase().trim();
+    if (email && !email.includes('@')) {
+      email = `${email}@boxinn.local`;
+    }
+    if (email === 'preetpal@boxinn.local') {
+      email = 'preet@boxinn.local';
+    }
     const password = typeof body.password === 'string' ? body.password : '';
 
     if (!isValidEmail(email)) {

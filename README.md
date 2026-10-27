@@ -4,6 +4,30 @@ A private, modern web application for members and staff of **BOX INN**, Puttenah
 
 ---
 
+## ⚡ Live Demo & Preview
+
+> **Live Preview URL**: [https://scout-eugene-norman-poll.trycloudflare.com](https://scout-eugene-norman-poll.trycloudflare.com)  
+> **Official Gym**: BOX INN, Puttenahalli, Yelahanka, Bengaluru  
+> **Direct Mobile Access**: Scan or open the link on any phone or laptop.
+
+### 🔑 Demo Login Accounts
+
+| Role | Username / Registered Email | Password | Access Details |
+| :--- | :--- | :--- | :--- |
+| **Member (Preetpal)** | `preet` *(or `preet@boxinn.local`)* | `preetpal` | Member dashboard, 4-day streak, QR check-in, attendance calendar |
+| **Member (Aarav)** | `aarav@boxinn.local` | `MemberPass123!` | Alternative member account |
+| **Staff Admin / Owner** | `admin@boxinn.local` | `AdminPass123!` | Gym management dashboard, member directory, attendance audits, machine manager |
+
+### 🏋️ Direct Scanned Machine Guide Links
+* **Machine Catalog**: [https://scout-eugene-norman-poll.trycloudflare.com/machines](https://scout-eugene-norman-poll.trycloudflare.com/machines)
+* **Concept2 RowErg Guide**: [https://scout-eugene-norman-poll.trycloudflare.com/machines/M-ROW-01](https://scout-eugene-norman-poll.trycloudflare.com/machines/M-ROW-01)
+* **Rogue Echo Fan Bike**: [https://scout-eugene-norman-poll.trycloudflare.com/machines/M-BIKE-01](https://scout-eugene-norman-poll.trycloudflare.com/machines/M-BIKE-01)
+* **Concept2 SkiErg**: [https://scout-eugene-norman-poll.trycloudflare.com/machines/M-SKI-01](https://scout-eugene-norman-poll.trycloudflare.com/machines/M-SKI-01)
+* **Olympic Lifting Rig**: [https://scout-eugene-norman-poll.trycloudflare.com/machines/M-OLY-01](https://scout-eugene-norman-poll.trycloudflare.com/machines/M-OLY-01)
+* **Staff Admin Portal**: [https://scout-eugene-norman-poll.trycloudflare.com/admin](https://scout-eugene-norman-poll.trycloudflare.com/admin)
+
+---
+
 ## Features
 
 ### Member Portal

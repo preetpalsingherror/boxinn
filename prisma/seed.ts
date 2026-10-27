@@ -22,7 +22,7 @@ async function main() {
   });
   console.log(`✓ Admin provisioned: ${admin.email}`);
 
-  // 2. Fictional Active Member (Aarav Patel)
+  // 2. Fictional Active Members (Aarav Patel & Preetpal Singh)
   const memberPasswordHash = await hashPassword('MemberPass123!');
   const member = await prisma.user.upsert({
     where: { email: 'aarav@boxinn.local' },
@@ -37,6 +37,83 @@ async function main() {
       emailVerifiedAt: new Date('2026-10-01T00:00:00.000Z'),
     },
   });
+
+  const preetPasswordHash = await hashPassword('preetpal');
+  const preetMember = await prisma.user.upsert({
+    where: { email: 'preet@boxinn.local' },
+    update: {
+      passwordHash: preetPasswordHash,
+      status: 'ACTIVE',
+      emailVerifiedAt: new Date('2026-10-01T00:00:00.000Z'),
+    },
+    create: {
+      email: 'preet@boxinn.local',
+      fullName: 'Preetpal Singh',
+      phone: '+919876543299',
+      passwordHash: preetPasswordHash,
+      role: 'MEMBER',
+      status: 'ACTIVE',
+      emailVerifiedAt: new Date('2026-10-01T00:00:00.000Z'),
+    },
+  });
+
+  // Membership for Preetpal
+  await prisma.membership.upsert({
+    where: { id: '00000000-0000-0000-0000-000000000099' },
+    update: {
+      status: 'ACTIVE',
+      expiryDate: '2027-10-01',
+    },
+    create: {
+      id: '00000000-0000-0000-0000-000000000099',
+      userId: preetMember.id,
+      planName: 'Unlimited Athlete (Strength & Conditioning)',
+      startDate: '2026-10-01',
+      expiryDate: '2027-10-01',
+      status: 'ACTIVE',
+      notes: 'Annual athlete membership package',
+    },
+  });
+
+  // Streaks for Preetpal
+  await prisma.memberStreak.upsert({
+    where: { userId: preetMember.id },
+    update: {
+      currentStreak: 4,
+      longestStreak: 7,
+      lastAttendanceDate: '2026-10-25',
+      streakStartDate: '2026-10-22',
+    },
+    create: {
+      userId: preetMember.id,
+      currentStreak: 4,
+      longestStreak: 7,
+      lastAttendanceDate: '2026-10-25',
+      streakStartDate: '2026-10-22',
+    },
+  });
+
+  // Attendance history for Preetpal
+  const preetSampleDates = ['2026-10-22', '2026-10-23', '2026-10-24', '2026-10-25'];
+  for (const date of preetSampleDates) {
+    const checkIn = new Date(`${date}T01:30:00.000Z`);
+    const checkOut = new Date(`${date}T03:00:00.000Z`);
+    await prisma.attendanceRecord.upsert({
+      where: {
+        userId_gymDate: { userId: preetMember.id, gymDate: date },
+      },
+      update: {},
+      create: {
+        userId: preetMember.id,
+        gymDate: date,
+        checkInTime: checkIn,
+        checkOutTime: checkOut,
+        source: 'ENTRANCE_QR',
+        isAutoClosed: false,
+      },
+    });
+  }
+  console.log(`✓ Active member provisioned with streak & attendance: ${preetMember.email} (password: preetpal)`);
 
   // Membership for Aarav
   await prisma.membership.upsert({

@@ -72,14 +72,16 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8] mb-1.5">
-              Registered Email
+              Registered Email or Username
             </label>
             <input
-              type="email"
+              type="text"
               required
+              autoCapitalize="none"
+              autoCorrect="off"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="athlete@boxinn.local"
+              placeholder="e.g. preet or athlete@boxinn.local"
               className="w-full px-4 py-3 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-[#F8F9FA] placeholder-[#94A3B8]/40 outline-none transition text-sm"
             />
           </div>
