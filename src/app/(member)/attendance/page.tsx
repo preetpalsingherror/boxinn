@@ -62,9 +62,9 @@ export default function AttendanceHistoryPage() {
           <div className="text-xl sm:text-2xl font-black text-[#F8F9FA] mt-1">{totalVisits}</div>
         </div>
         <div className="p-3 bg-[#14171F] border border-[#2A303C] rounded-2xl">
-          <div className="text-[10px] font-bold text-[#FF5500] uppercase">Active Streak</div>
-          <div className="text-xl sm:text-2xl font-black text-[#FF5500] mt-1 flex items-center justify-center gap-1">
-            <Flame className="w-4 h-4" />
+          <div className="text-[10px] font-bold text-[#CADA03] uppercase">Active Streak</div>
+          <div className="text-xl sm:text-2xl font-black text-[#CADA03] mt-1 flex items-center justify-center gap-1">
+            <Flame className="w-4 h-4 text-[#CADA03]" />
             <span>{streak.displayStreak ?? streak.currentStreak}d</span>
           </div>
         </div>
@@ -80,7 +80,7 @@ export default function AttendanceHistoryPage() {
       {/* History List */}
       <div className="bg-[#14171F] border border-[#2A303C] rounded-2xl p-4 sm:p-5 shadow-xl">
         <h2 className="text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-4 flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-[#FF5500]" />
+          <Calendar className="w-4 h-4 text-[#CADA03]" />
           <span>Gym-Local Calendar Days (Asia/Kolkata)</span>
         </h2>
 
@@ -116,7 +116,7 @@ export default function AttendanceHistoryPage() {
                         {r.gymDate}
                       </div>
                       <div className="text-[11px] text-[#94A3B8] flex items-center gap-2 mt-0.5">
-                        <Clock className="w-3 h-3 text-[#FF5500]" />
+                        <Clock className="w-3 h-3 text-[#CADA03]" />
                         <span>
                           {checkIn.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })}
                           {checkOut ? ` – ${checkOut.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })}` : ' (In session)'}

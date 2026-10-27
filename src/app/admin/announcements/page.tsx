@@ -115,7 +115,7 @@ export default function AdminAnnouncementsPage() {
         {/* Creator Form */}
         <div className="lg:col-span-1 bg-[#14171F] border border-[#2A303C] rounded-2xl p-5 shadow-xl h-fit">
           <h2 className="text-sm font-bold uppercase tracking-wider text-[#F8F9FA] mb-4 flex items-center gap-2">
-            <Plus className="w-4 h-4 text-[#FF5500]" />
+            <Plus className="w-4 h-4 text-[#CADA03]" />
             <span>Publish New Notice</span>
           </h2>
 
@@ -142,7 +142,7 @@ export default function AdminAnnouncementsPage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. HYROX Simulation Workshop This Saturday"
-                className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-xs text-[#F8F9FA] outline-none"
+                className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-xs text-[#F8F9FA] outline-none"
               />
             </div>
 
@@ -156,7 +156,7 @@ export default function AdminAnnouncementsPage() {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Session details, timing in Asia/Kolkata, registration requirements..."
-                className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-xs text-[#F8F9FA] outline-none"
+                className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-xs text-[#F8F9FA] outline-none"
               />
             </div>
 
@@ -165,7 +165,7 @@ export default function AdminAnnouncementsPage() {
                 type="checkbox"
                 checked={isUrgent}
                 onChange={(e) => setIsUrgent(e.target.checked)}
-                className="rounded accent-[#FF5500] w-4 h-4 cursor-pointer"
+                className="rounded accent-[#CADA03] w-4 h-4 cursor-pointer"
               />
               <span className="text-xs font-semibold text-[#F8F9FA]">
                 Flag as Urgent Alert (Pins to top of Member Home)
@@ -175,7 +175,7 @@ export default function AdminAnnouncementsPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-2.5 px-4 bg-[#FF5500] hover:bg-[#E04B00] text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 transition shadow-[0_4px_16px_rgba(255,85,0,0.3)] disabled:opacity-50"
+              className="w-full py-2.5 px-4 bg-[#CADA03] hover:bg-[#B8C702] text-[#0A0B0E] font-black rounded-xl text-xs flex items-center justify-center gap-1.5 transition shadow-[0_4px_16px_rgba(202,218,3,0.25)] disabled:opacity-50"
             >
               {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>Broadcast Announcement</span>
@@ -186,13 +186,13 @@ export default function AdminAnnouncementsPage() {
         {/* Existing Announcements Feed */}
         <div className="lg:col-span-2 space-y-3">
           <h2 className="text-sm font-bold uppercase tracking-wider text-[#94A3B8] mb-2 flex items-center gap-1.5">
-            <Megaphone className="w-4 h-4 text-[#FF5500]" />
+            <Megaphone className="w-4 h-4 text-[#CADA03]" />
             <span>Active Announcements Feed ({announcements.length})</span>
           </h2>
 
           {loading ? (
             <div className="py-12 text-center text-[#94A3B8]">
-              <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[#FF5500]" />
+              <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[#CADA03]" />
               <span>Loading notices...</span>
             </div>
           ) : announcements.length === 0 ? (

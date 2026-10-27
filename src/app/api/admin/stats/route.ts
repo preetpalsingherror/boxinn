@@ -37,5 +37,6 @@ export async function GET(req: NextRequest) {
     machinesCount,
     liveOccupancy: occupancy.count,
     occupancyNotice: occupancy.capacityNotice,
+    activeAthletes: occupancy.activeAthletes,
   });
 }

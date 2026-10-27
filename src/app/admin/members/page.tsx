@@ -421,7 +421,7 @@ function MembersContent() {
             </button>
 
             <div className="flex items-center gap-2 mb-4">
-              <UserPlus className="w-5 h-5 text-[#FF5500]" />
+              <UserPlus className="w-5 h-5 text-[#CADA03]" />
               <h2 className="text-lg font-bold text-[#F8F9FA]">Generate Member Invitation</h2>
             </div>
 
@@ -450,7 +450,7 @@ function MembersContent() {
                     />
                     <button
                       onClick={handleCopyInvite}
-                      className="px-3 py-2 bg-[#FF5500] hover:bg-[#E04B00] text-white font-bold rounded-xl text-xs flex items-center gap-1 shrink-0"
+                      className="px-3 py-2 bg-[#CADA03] hover:bg-[#B8C702] text-[#0A0B0E] font-black rounded-xl text-xs flex items-center gap-1 shrink-0"
                     >
                       {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                       <span>{copied ? 'Copied' : 'Copy'}</span>
@@ -483,7 +483,7 @@ function MembersContent() {
                     value={inviteName}
                     onChange={(e) => setInviteName(e.target.value)}
                     placeholder="e.g. Rahul Sharma"
-                    className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-xs text-[#F8F9FA] outline-none"
+                    className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-xs text-[#F8F9FA] outline-none"
                   />
                 </div>
 
@@ -498,7 +498,7 @@ function MembersContent() {
                       value={inviteEmail}
                       onChange={(e) => setInviteEmail(e.target.value)}
                       placeholder="athlete@example.com"
-                      className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-xs text-[#F8F9FA] outline-none"
+                      className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-xs text-[#F8F9FA] outline-none"
                     />
                   </div>
 
@@ -511,7 +511,7 @@ function MembersContent() {
                       value={invitePhone}
                       onChange={(e) => setInvitePhone(e.target.value)}
                       placeholder="+919876543210"
-                      className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-xs text-[#F8F9FA] outline-none"
+                      className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-xs text-[#F8F9FA] outline-none"
                     />
                   </div>
                 </div>
@@ -526,7 +526,7 @@ function MembersContent() {
                     value={invitePlan}
                     onChange={(e) => setInvitePlan(e.target.value)}
                     placeholder="e.g. General Training (CrossFit & HYROX)"
-                    className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-xs text-[#F8F9FA] outline-none"
+                    className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-xs text-[#F8F9FA] outline-none"
                   />
                 </div>
 
@@ -540,7 +540,7 @@ function MembersContent() {
                       required
                       value={inviteStartDate}
                       onChange={(e) => setInviteStartDate(e.target.value)}
-                      className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-xs text-[#F8F9FA] outline-none font-mono"
+                      className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-xs text-[#F8F9FA] outline-none font-mono"
                     />
                   </div>
 

@@ -288,7 +288,7 @@ export class AttendanceService {
   }
 
   /**
-   * Calculates real-time gym floor occupancy count.
+   * Calculates real-time gym floor occupancy count and active athlete list.
    * Calculated from check-ins recorded today (Asia/Kolkata) where session auto-close (3 hours)
    * has not elapsed and member has not manually checked out.
    */
@@ -297,12 +297,20 @@ export class AttendanceService {
     gymDate: string;
     asOf: string;
     capacityNotice: string;
+    activeAthletes: Array<{
+      userId: string;
+      fullName: string;
+      email: string;
+      checkInTime: string;
+      elapsedMinutes: number;
+      remainingMinutes: number;
+    }>;
   }> {
     const now = new Date();
     const gymDate = toGymLocalDate(now, 'Asia/Kolkata');
     const threeHoursAgo = new Date(now.getTime() - SESSION_DURATION_MS);
 
-    const count = await prisma.attendanceRecord.count({
+    const activeRecords = await prisma.attendanceRecord.findMany({
       where: {
         gymDate,
         checkOutTime: null,
@@ -311,7 +319,21 @@ export class AttendanceService {
           gt: threeHoursAgo,
         },
       },
+      include: {
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        checkInTime: 'desc',
+      },
     });
+
+    const count = activeRecords.length;
 
     let capacityNotice = 'Calm & Spaced • Great time to train';
     if (count >= 15) {
@@ -320,11 +342,28 @@ export class AttendanceService {
       capacityNotice = 'Moderate Activity • Rigs & Stations Ready';
     }
 
+    const activeAthletes = activeRecords.map((r) => {
+      const checkInMs = r.checkInTime.getTime();
+      const elapsedMs = Math.max(0, now.getTime() - checkInMs);
+      const elapsedMinutes = Math.floor(elapsedMs / (60 * 1000));
+      const remainingMinutes = Math.max(0, 180 - elapsedMinutes);
+
+      return {
+        userId: r.user.id,
+        fullName: r.user.fullName,
+        email: r.user.email,
+        checkInTime: r.checkInTime.toISOString(),
+        elapsedMinutes,
+        remainingMinutes,
+      };
+    });
+
     return {
       count,
       gymDate,
       asOf: now.toISOString(),
       capacityNotice,
+      activeAthletes,
     };
   }
 }

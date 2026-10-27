@@ -503,6 +503,36 @@ export class AuthService {
 
     return { message: 'Password has been successfully reset. Please log in with your new password.' };
   }
+
+  /**
+   * Allows an authenticated user to update their password from their profile.
+   * Verifies current password, validates new password, and updates the user record.
+   */
+  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user || !user.passwordHash) {
+      throw new Error('User not found.');
+    }
+
+    const isMatch = await comparePassword(currentPassword, user.passwordHash);
+    if (!isMatch) {
+      throw new Error('Current password is incorrect.');
+    }
+
+    if (newPassword.length < 8) {
+      throw new Error('New password must be at least 8 characters long.');
+    }
+
+    const newHash = await hashPassword(newPassword);
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash: newHash },
+    });
+  }
 }
 
 export const authService = new AuthService();

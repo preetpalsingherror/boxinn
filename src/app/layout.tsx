@@ -4,8 +4,15 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'BOX INN Member Companion | Yelahanka, Bengaluru',
   description: 'Private mobile-first web companion for enrolled members of BOX INN gym.',
+  manifest: '/manifest.json',
   icons: {
-    icon: '/favicon.ico',
+    icon: '/brand/bxn-mark.png',
+    apple: '/brand/bxn-mark.png',
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'BOX INN',
   },
 };
 

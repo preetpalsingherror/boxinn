@@ -11,7 +11,8 @@ import {
   Loader2, 
   AlertCircle,
   ShieldCheck,
-  Flame
+  Flame,
+  Download
 } from 'lucide-react';
 import { CSRF_COOKIE_NAME, CSRF_HEADER_NAME } from '../../../presentation/security/cookie-constants.ts';
 
@@ -75,6 +76,32 @@ export default function AdminAttendancePage() {
     loadAttendance();
   }, [date]);
 
+  const handleExportCSV = () => {
+    if (records.length === 0) return;
+    const headers = ['Athlete Name', 'Email', 'Gym Date', 'Check-In Time (IST)', 'Check-Out Time (IST)', 'Source', 'Auto Closed'];
+    const rows = records.map((r) => {
+      const checkIn = new Date(r.checkInTime).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+      const checkOut = r.checkOutTime ? new Date(r.checkOutTime).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : 'Still Active';
+      return [
+        `"${r.user.fullName.replace(/"/g, '""')}"`,
+        `"${r.user.email.replace(/"/g, '""')}"`,
+        `"${r.gymDate}"`,
+        `"${checkIn}"`,
+        `"${checkOut}"`,
+        `"${r.source}"`,
+        `"${r.isAutoClosed ? 'Yes' : 'No'}"`,
+      ].join(',');
+    });
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `boxinn-attendance-${date}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleCorrect = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedRecord) return;
@@ -130,14 +157,25 @@ export default function AdminAttendancePage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <label className="text-xs font-semibold text-[#94A3B8]">Filter Date:</label>
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="px-3 py-1.5 bg-[#14171F] border border-[#2A303C] rounded-xl text-xs text-[#F8F9FA] outline-none font-mono"
-          />
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleExportCSV}
+            disabled={records.length === 0}
+            className="px-3 py-1.5 bg-[#14171F] hover:bg-[#1D222E] text-xs font-bold text-[#F8F9FA] hover:text-[#CADA03] border border-[#2A303C] rounded-xl flex items-center gap-1.5 transition disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <Download className="w-3.5 h-3.5 text-[#CADA03]" />
+            <span>Export CSV</span>
+          </button>
+
+          <div className="flex items-center gap-2">
+            <label className="text-xs font-semibold text-[#94A3B8]">Filter Date:</label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="px-3 py-1.5 bg-[#14171F] border border-[#2A303C] rounded-xl text-xs text-[#F8F9FA] outline-none font-mono"
+            />
+          </div>
         </div>
       </div>
 
@@ -165,7 +203,7 @@ export default function AdminAttendancePage() {
               {loading ? (
                 <tr>
                   <td colSpan={5} className="py-8 text-center text-[#94A3B8]">
-                    <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[#FF5500]" />
+                    <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[#CADA03]" />
                     <span>Loading attendance records...</span>
                   </td>
                 </tr>
@@ -227,7 +265,7 @@ export default function AdminAttendancePage() {
                             setError(null);
                             setSuccess(null);
                           }}
-                          className="px-2.5 py-1.5 bg-[#1D222E] hover:bg-[#2A303C] text-[#FF5500] hover:text-white rounded-lg text-[11px] font-bold border border-[#2A303C] transition flex items-center gap-1 ml-auto"
+                          className="px-2.5 py-1.5 bg-[#1D222E] hover:bg-[#2A303C] text-[#CADA03] hover:text-white rounded-lg text-[11px] font-bold border border-[#2A303C] transition flex items-center gap-1 ml-auto"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                           <span>Correct Date</span>
@@ -294,7 +332,7 @@ export default function AdminAttendancePage() {
                     required
                     value={correctedDate}
                     onChange={(e) => setCorrectedDate(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-xs text-[#F8F9FA] outline-none font-mono"
+                    className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-xs text-[#F8F9FA] outline-none font-mono"
                   />
                 </div>
               </div>
@@ -309,12 +347,12 @@ export default function AdminAttendancePage() {
                   value={correctionReason}
                   onChange={(e) => setCorrectionReason(e.target.value)}
                   placeholder="e.g. Athlete scanned past midnight for previous evening's training session."
-                  className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-xs text-[#F8F9FA] outline-none"
+                  className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-xs text-[#F8F9FA] outline-none"
                 />
               </div>
 
               <div className="p-3 bg-[#1D222E] rounded-xl border border-[#2A303C] text-[11px] text-[#94A3B8] flex items-center gap-2">
-                <Flame className="w-4 h-4 text-[#FF5500] shrink-0" />
+                <Flame className="w-4 h-4 text-[#CADA03] shrink-0" />
                 <span>Submitting will atomically update the record, log the audit entry, and recalculate the member&apos;s full consistency streak ledger.</span>
               </div>
 
@@ -329,7 +367,7 @@ export default function AdminAttendancePage() {
                 <button
                   type="submit"
                   disabled={submitting || !correctionReason}
-                  className="px-4 py-2 bg-[#FF5500] hover:bg-[#E04B00] text-xs font-bold text-white rounded-xl flex items-center gap-1.5 disabled:opacity-50"
+                  className="px-4 py-2 bg-[#CADA03] hover:bg-[#B8C702] text-xs font-black text-[#0A0B0E] rounded-xl flex items-center gap-1.5 disabled:opacity-50 uppercase"
                 >
                   {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Save & Recalculate Streak</span>

@@ -11,8 +11,19 @@ import {
   Dumbbell, 
   ShieldCheck, 
   ArrowRight,
-  Activity
+  Activity,
+  X,
+  UserCheck
 } from 'lucide-react';
+
+interface ActiveAthlete {
+  userId: string;
+  fullName: string;
+  email: string;
+  checkInTime: string;
+  elapsedMinutes: number;
+  remainingMinutes: number;
+}
 
 interface Stats {
   gymDate: string;
@@ -23,12 +34,14 @@ interface Stats {
   machinesCount: number;
   liveOccupancy?: number;
   occupancyNotice?: string;
+  activeAthletes?: ActiveAthlete[];
 }
 
 export default function AdminOverviewPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [health, setHealth] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [showLiveModal, setShowLiveModal] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -95,7 +108,11 @@ export default function AdminOverviewPage() {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
-        <div className="p-4 bg-[#14171F] border border-[#CADA03]/50 rounded-2xl shadow-lg relative overflow-hidden">
+        <div 
+          onClick={() => setShowLiveModal(true)}
+          className="p-4 bg-[#14171F] hover:bg-[#1D222E] border border-[#CADA03]/50 hover:border-[#CADA03] rounded-2xl shadow-lg relative overflow-hidden cursor-pointer transition group"
+          title="Click to view athletes currently on gym floor"
+        >
           <div className="flex items-center justify-between text-[#94A3B8] mb-2">
             <span className="text-xs font-black uppercase tracking-wider text-[#CADA03] flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-[#CADA03] animate-ping" />
@@ -104,7 +121,10 @@ export default function AdminOverviewPage() {
             <Activity className="w-4 h-4 text-[#CADA03]" />
           </div>
           <div className="text-3xl font-black text-[#CADA03]">{stats?.liveOccupancy ?? 0}</div>
-          <div className="text-[11px] text-[#94A3B8] mt-1 font-medium">{stats?.occupancyNotice ?? 'Active athletes right now'}</div>
+          <div className="text-[11px] text-[#94A3B8] mt-1 font-medium flex items-center justify-between">
+            <span>{stats?.occupancyNotice ?? 'Active athletes right now'}</span>
+            <span className="text-[10px] text-[#CADA03] font-bold opacity-0 group-hover:opacity-100 transition">View →</span>
+          </div>
         </div>
 
         <div className="p-4 bg-[#14171F] border border-[#2A303C] rounded-2xl shadow-lg">
@@ -227,6 +247,84 @@ export default function AdminOverviewPage() {
           App Version: 0.1.0 • Facility: Yelahanka
         </div>
       </div>
+
+      {/* Live Floor Athlete Modal */}
+      {showLiveModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-[#14171F] border border-[#2A303C] rounded-2xl p-6 shadow-2xl relative max-h-[85vh] flex flex-col">
+            <button
+              onClick={() => setShowLiveModal(false)}
+              className="absolute top-4 right-4 text-[#94A3B8] hover:text-[#F8F9FA] transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-2 mb-1">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#CADA03] animate-ping" />
+              <h2 className="text-lg font-black text-[#F8F9FA]">Active Athletes on Gym Floor</h2>
+            </div>
+            <p className="text-xs text-[#94A3B8] mb-4">
+              Real-time entrance scans in Asia/Kolkata where 3-hour session auto-close has not elapsed.
+            </p>
+
+            <div className="overflow-y-auto flex-1 space-y-2.5 pr-1">
+              {!stats?.activeAthletes || stats.activeAthletes.length === 0 ? (
+                <div className="p-8 text-center bg-[#0A0B0E] border border-[#2A303C] rounded-xl text-xs text-[#94A3B8]">
+                  <UserCheck className="w-8 h-8 text-[#94A3B8]/40 mx-auto mb-2" />
+                  No athletes currently checked in on the floor.
+                </div>
+              ) : (
+                stats.activeAthletes.map((athlete) => {
+                  const checkIn = new Date(athlete.checkInTime).toLocaleTimeString('en-IN', {
+                    timeZone: 'Asia/Kolkata',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  });
+                  return (
+                    <div
+                      key={athlete.userId}
+                      className="p-3 bg-[#0A0B0E] border border-[#2A303C] rounded-xl flex items-center justify-between gap-3"
+                    >
+                      <div>
+                        <div className="text-sm font-bold text-[#F8F9FA]">{athlete.fullName}</div>
+                        <div className="text-[11px] text-[#94A3B8] font-mono">{athlete.email}</div>
+                        <div className="text-[10px] text-[#94A3B8] mt-1">
+                          Scanned In: <span className="font-mono text-[#F8F9FA] font-bold">{checkIn} IST</span>
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <span className="px-2 py-0.5 rounded-md bg-[#CADA03]/10 text-[#CADA03] font-bold text-[11px] border border-[#CADA03]/30">
+                          {athlete.elapsedMinutes}m on floor
+                        </span>
+                        <div className="text-[10px] text-[#94A3B8] mt-1 font-mono">
+                          {athlete.remainingMinutes}m auto-close
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-[#2A303C] flex items-center justify-between">
+              <Link
+                href="/admin/attendance"
+                onClick={() => setShowLiveModal(false)}
+                className="text-xs font-bold text-[#CADA03] hover:underline flex items-center gap-1"
+              >
+                <span>View Full Attendance Logs</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+              <button
+                onClick={() => setShowLiveModal(false)}
+                className="px-4 py-2 bg-[#1D222E] hover:bg-[#2A303C] text-xs font-bold text-[#F8F9FA] rounded-xl"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

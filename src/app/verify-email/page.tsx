@@ -185,7 +185,7 @@ function VerifyEmailContent() {
                   value={resendEmail}
                   onChange={(e) => setResendEmail(e.target.value)}
                   placeholder="Enter your registered email"
-                  className="w-full px-3.5 py-2.5 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#FF5500] rounded-xl text-[#F8F9FA] placeholder-[#94A3B8]/40 outline-none text-xs"
+                  className="w-full px-3.5 py-2.5 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-[#F8F9FA] placeholder-[#94A3B8]/40 outline-none text-xs"
                 />
                 <button
                   type="submit"
