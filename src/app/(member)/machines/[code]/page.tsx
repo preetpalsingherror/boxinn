@@ -14,6 +14,38 @@ import {
   ExternalLink
 } from 'lucide-react';
 
+function normalizeVideoEmbedUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  const trimmed = url.trim();
+  if (!trimmed) return null;
+
+  try {
+    if (trimmed.includes('youtube.com/embed/') || trimmed.includes('youtube-nocookie.com/embed/')) {
+      return trimmed;
+    }
+    const youtuBeMatch = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+    if (youtuBeMatch && youtuBeMatch[1]) {
+      return `https://www.youtube-nocookie.com/embed/${youtuBeMatch[1]}`;
+    }
+    const ytWatchMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+    if (ytWatchMatch && ytWatchMatch[1]) {
+      return `https://www.youtube-nocookie.com/embed/${ytWatchMatch[1]}`;
+    }
+    const ytShortsMatch = trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
+    if (ytShortsMatch && ytShortsMatch[1]) {
+      return `https://www.youtube-nocookie.com/embed/${ytShortsMatch[1]}`;
+    }
+    const vimeoMatch = trimmed.match(/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/);
+    if (vimeoMatch && (vimeoMatch[3] || vimeoMatch[1])) {
+      const vimeoId = vimeoMatch[3] || vimeoMatch[1];
+      return `https://player.vimeo.com/video/${vimeoId}`;
+    }
+    return trimmed;
+  } catch {
+    return trimmed;
+  }
+}
+
 interface Exercise {
   id: string;
   title: string;
@@ -224,7 +256,7 @@ export default function MachineDetailPage({
                     </h4>
                     <div className="aspect-video w-full rounded-xl overflow-hidden bg-[#0A0B0E] border border-[#2A303C]">
                       <iframe
-                        src={ex.videoUrl}
+                        src={normalizeVideoEmbedUrl(ex.videoUrl) || ex.videoUrl}
                         title={`${ex.title} Form Demonstration`}
                         className="w-full h-full border-0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

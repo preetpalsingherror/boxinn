@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server.js';
 import { requireAuth, requireAdmin } from '../../../../presentation/security/auth-guard.ts';
 import { prisma } from '../../../../infrastructure/db/client.ts';
 import { jsonSuccess, jsonError } from '../../../../presentation/http/response.ts';
-import { sanitizeString } from '../../../../presentation/http/validation.ts';
+import { sanitizeString, normalizeVideoEmbedUrl } from '../../../../presentation/http/validation.ts';
 
 export async function GET(
   req: NextRequest,
@@ -62,7 +62,7 @@ export async function POST(
     const targetMuscleGroup = sanitizeString(body.targetMuscleGroup, 128);
     const instructions = sanitizeString(body.instructions, 2048);
     const safetyPrecautions = sanitizeString(body.safetyPrecautions, 1024);
-    const videoUrl = body.videoUrl ? sanitizeString(body.videoUrl, 512) : null;
+    const videoUrl = body.videoUrl ? normalizeVideoEmbedUrl(sanitizeString(body.videoUrl, 512)) : null;
     const trainerName = sanitizeString(body.trainerName || 'Coach Vikram', 64);
     const difficulty = body.difficulty || 'ALL_LEVELS';
 

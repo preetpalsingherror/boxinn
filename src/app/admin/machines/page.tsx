@@ -507,15 +507,18 @@ export default function AdminMachinesPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-[#94A3B8] mb-1">
-                    Demo Video URL (Optional)
+                    Demo Video URL (YouTube / Vimeo)
                   </label>
                   <input
                     type="url"
                     value={videoUrl}
                     onChange={(e) => setVideoUrl(e.target.value)}
-                    placeholder="https://..."
+                    placeholder="https://youtu.be/... or https://youtube.com/watch?v=..."
                     className="w-full px-3 py-2 bg-[#0A0B0E] border border-[#2A303C] focus:border-[#CADA03] rounded-xl text-xs text-[#F8F9FA] outline-none"
                   />
+                  <p className="text-[10px] text-[#94A3B8]/70 mt-1">
+                    Standard YouTube, Shorts, or Vimeo URLs are auto-converted to embed format.
+                  </p>
                 </div>
 
                 <div>

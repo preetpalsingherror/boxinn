@@ -49,3 +49,48 @@ export function extractClientIp(req: Request): string {
   if (realIp) return realIp.trim();
   return '127.0.0.1';
 }
+
+/**
+ * Normalizes video links (YouTube, YouTube Shorts, Vimeo) into secure embeddable iframe URLs.
+ */
+export function normalizeVideoEmbedUrl(url: unknown): string | null {
+  if (typeof url !== 'string') return null;
+  const trimmed = url.trim();
+  if (!trimmed) return null;
+
+  try {
+    // Already an embed URL
+    if (trimmed.includes('youtube.com/embed/') || trimmed.includes('youtube-nocookie.com/embed/')) {
+      return trimmed;
+    }
+
+    // youtu.be/VIDEO_ID
+    const youtuBeMatch = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+    if (youtuBeMatch && youtuBeMatch[1]) {
+      return `https://www.youtube-nocookie.com/embed/${youtuBeMatch[1]}`;
+    }
+
+    // youtube.com/watch?v=VIDEO_ID
+    const ytWatchMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+    if (ytWatchMatch && ytWatchMatch[1]) {
+      return `https://www.youtube-nocookie.com/embed/${ytWatchMatch[1]}`;
+    }
+
+    // youtube.com/shorts/VIDEO_ID
+    const ytShortsMatch = trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
+    if (ytShortsMatch && ytShortsMatch[1]) {
+      return `https://www.youtube-nocookie.com/embed/${ytShortsMatch[1]}`;
+    }
+
+    // vimeo.com/VIDEO_ID
+    const vimeoMatch = trimmed.match(/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/);
+    if (vimeoMatch && (vimeoMatch[3] || vimeoMatch[1])) {
+      const vimeoId = vimeoMatch[3] || vimeoMatch[1];
+      return `https://player.vimeo.com/video/${vimeoId}`;
+    }
+
+    return trimmed;
+  } catch {
+    return trimmed;
+  }
+}
