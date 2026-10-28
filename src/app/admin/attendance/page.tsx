@@ -12,8 +12,10 @@ import {
   AlertCircle,
   ShieldCheck,
   Flame,
-  Download
+  Download,
+  QrCode
 } from 'lucide-react';
+import { EntranceQrModal } from '../EntranceQrModal.tsx';
 import { CSRF_COOKIE_NAME, CSRF_HEADER_NAME } from '../../../presentation/security/cookie-constants.ts';
 
 interface AttendanceItem {
@@ -56,6 +58,7 @@ export default function AdminAttendancePage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [showEntranceQr, setShowEntranceQr] = useState(false);
 
   const loadAttendance = async () => {
     setLoading(true);
@@ -157,7 +160,16 @@ export default function AdminAttendancePage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <button
+            onClick={() => setShowEntranceQr(true)}
+            className="px-3 py-1.5 bg-[#CADA03] hover:bg-[#B8C702] text-xs font-black text-[#0A0B0E] rounded-xl flex items-center gap-1.5 transition uppercase"
+            title="Generate or print entrance check-in QR poster for reception desk"
+          >
+            <QrCode className="w-3.5 h-3.5 text-[#0A0B0E]" />
+            <span>Entrance Check-In QR</span>
+          </button>
+
           <button
             onClick={handleExportCSV}
             disabled={records.length === 0}
@@ -377,6 +389,12 @@ export default function AdminAttendancePage() {
           </div>
         </div>
       )}
+
+      {/* Entrance Check-In QR Poster Modal */}
+      <EntranceQrModal
+        isOpen={showEntranceQr}
+        onClose={() => setShowEntranceQr(false)}
+      />
     </div>
   );
 }

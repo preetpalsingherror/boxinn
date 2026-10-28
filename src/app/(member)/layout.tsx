@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Home, QrCode, Calendar, Dumbbell, User, LogOut, Loader2 } from 'lucide-react';
 import clsx from 'clsx';
@@ -12,21 +12,47 @@ export default function MemberLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [checking, setChecking] = useState(true);
   const [authorized, setAuthorized] = useState(false);
-  const [userRole, setUserRole] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string>('');
 
   useEffect(() => {
+    // Fast-path: check sessionStorage cache to eliminate layout flash/lag on navigation
+    try {
+      const cached = sessionStorage.getItem('boxinn_member_session');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed.role === 'MEMBER') {
+          setUserName(parsed.fullName || '');
+          setAuthorized(true);
+          setChecking(false);
+        }
+      }
+    } catch {
+      // ignore storage errors
+    }
+
     async function verifyMember() {
       try {
         const res = await fetch('/api/auth/me');
         if (!res.ok) {
+          sessionStorage.removeItem('boxinn_member_session');
           window.location.href = '/login';
           return;
         }
         const data = await res.json();
-        setUserRole(data.data?.user?.role || 'MEMBER');
+        const user = data.data?.user;
+        // Strict Role Separation: Admin accounts belong strictly in /admin, never in member profile/portal
+        if (user?.role === 'ADMIN') {
+          sessionStorage.removeItem('boxinn_member_session');
+          window.location.href = '/admin';
+          return;
+        }
+        sessionStorage.setItem(
+          'boxinn_member_session',
+          JSON.stringify({ role: user?.role || 'MEMBER', fullName: user?.fullName || '' })
+        );
+        setUserName(user?.fullName || '');
         setAuthorized(true);
       } catch {
         window.location.href = '/login';
@@ -39,6 +65,8 @@ export default function MemberLayout({
 
   const handleLogout = async () => {
     try {
+      sessionStorage.removeItem('boxinn_member_session');
+      sessionStorage.removeItem('boxinn_admin_session');
       await fetch('/api/auth/logout', { method: 'POST' });
       window.location.href = '/login';
     } catch {
@@ -71,22 +99,46 @@ export default function MemberLayout({
       {/* Top Header */}
       <header className="sticky top-0 z-40 bg-[#0A0B0E]/95 backdrop-blur-md border-b border-[#2A303C]/80 px-4 py-2.5">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <Link href="/home" className="flex items-center gap-2 group">
+          <Link href="/home" prefetch={true} className="flex items-center gap-2.5 group">
             <img 
               src="/brand/boxinn-horizontal-dark.png" 
               alt="BOX INN - Rise Above The Average" 
               className="h-8 w-auto object-contain transition group-hover:opacity-90" 
             />
+            <span className="text-[10px] px-2 py-0.5 bg-emerald-950/60 text-emerald-400 border border-emerald-500/30 rounded font-bold tracking-wider uppercase">
+              Athlete Portal
+            </span>
           </Link>
 
+          {/* Desktop Quick Nav */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href || (item.href !== '/home' && pathname?.startsWith(item.href));
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  prefetch={true}
+                  className={clsx(
+                    'px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition',
+                    isActive
+                      ? 'bg-[#CADA03] text-[#0A0B0E]'
+                      : 'text-[#94A3B8] hover:text-[#F8F9FA] hover:bg-[#14171F]'
+                  )}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
+
           <div className="flex items-center gap-2">
-            {userRole === 'ADMIN' && (
-              <Link
-                href="/admin"
-                className="text-[11px] font-bold text-[#94A3B8] hover:text-[#CADA03] px-2.5 py-1 rounded-md bg-[#14171F] border border-[#2A303C] hover:border-[#CADA03]/40 transition"
-              >
-                Admin Mode
-              </Link>
+            {userName && (
+              <span className="text-xs text-[#94A3B8] hidden sm:inline font-medium truncate max-w-[120px]">
+                {userName.split(' ')[0]}
+              </span>
             )}
             <button
               onClick={handleLogout}
@@ -116,6 +168,7 @@ export default function MemberLayout({
                 <Link
                   key={item.href}
                   href={item.href}
+                  prefetch={true}
                   className="flex flex-col items-center justify-center -mt-5"
                 >
                   <div className="w-12 h-12 rounded-full bg-[#CADA03] hover:bg-[#B8C702] text-[#0A0B0E] flex items-center justify-center shadow-[0_4px_16px_rgba(202,218,3,0.4)] active:scale-95 transition">
@@ -132,6 +185,7 @@ export default function MemberLayout({
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={true}
                 className={clsx(
                   'flex flex-col items-center justify-center py-1 rounded-xl transition min-h-[44px]',
                   isActive ? 'text-[#CADA03]' : 'text-[#94A3B8] hover:text-[#F8F9FA]'

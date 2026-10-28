@@ -31,9 +31,23 @@ export default function LoginPage() {
       }
 
       if (data.data.user.role === 'ADMIN') {
-        window.location.href = '/admin';
+        try {
+          sessionStorage.removeItem('boxinn_member_session');
+          sessionStorage.setItem(
+            'boxinn_admin_session',
+            JSON.stringify({ role: 'ADMIN', fullName: data.data.user.fullName || 'Admin' })
+          );
+        } catch {}
+        router.push('/admin');
       } else {
-        window.location.href = '/home';
+        try {
+          sessionStorage.removeItem('boxinn_admin_session');
+          sessionStorage.setItem(
+            'boxinn_member_session',
+            JSON.stringify({ role: 'MEMBER', fullName: data.data.user.fullName || '' })
+          );
+        } catch {}
+        router.push('/home');
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Invalid login attempt.');

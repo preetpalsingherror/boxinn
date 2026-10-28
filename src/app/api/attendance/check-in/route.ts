@@ -11,6 +11,10 @@ export async function POST(req: NextRequest) {
 
   const { user } = guard.auth;
 
+  if (user.role === 'ADMIN') {
+    return jsonError('Staff admin accounts cannot record member gym check-ins. Please sign in with an athlete member account.', 403);
+  }
+
   try {
     const result = await attendanceService.recordCheckIn(user.id, 'ENTRANCE_QR');
     return jsonSuccess(result, 200);

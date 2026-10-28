@@ -13,6 +13,9 @@ export async function GET(req: NextRequest) {
   const machines = await prisma.machine.findMany({
     orderBy: [{ category: 'asc' }, { code: 'asc' }],
     include: {
+      exercises: {
+        orderBy: { createdAt: 'asc' },
+      },
       _count: {
         select: { exercises: true },
       },

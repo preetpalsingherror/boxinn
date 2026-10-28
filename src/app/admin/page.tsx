@@ -13,8 +13,10 @@ import {
   ArrowRight,
   Activity,
   X,
-  UserCheck
+  UserCheck,
+  QrCode
 } from 'lucide-react';
+import { EntranceQrModal } from './EntranceQrModal.tsx';
 
 interface ActiveAthlete {
   userId: string;
@@ -42,6 +44,7 @@ export default function AdminOverviewPage() {
   const [health, setHealth] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showLiveModal, setShowLiveModal] = useState(false);
+  const [showEntranceQr, setShowEntranceQr] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -97,13 +100,24 @@ export default function AdminOverviewPage() {
           </p>
         </div>
 
-        <Link
-          href="/admin/members?invite=true"
-          className="px-4 py-2.5 bg-[#CADA03] hover:bg-[#B8C702] text-[#0A0B0E] font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(202,218,3,0.3)] transition uppercase"
-        >
-          <UserPlus className="w-4 h-4 text-[#0A0B0E]" />
-          <span>Invite New Member</span>
-        </Link>
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => setShowEntranceQr(true)}
+            className="px-4 py-2.5 bg-[#1D222E] hover:bg-[#2A303C] border border-[#CADA03]/40 text-[#F8F9FA] hover:text-[#CADA03] font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition uppercase"
+            title="Generate or print the reception desk check-in QR poster for members"
+          >
+            <QrCode className="w-4 h-4 text-[#CADA03]" />
+            <span>Entrance Check-In QR</span>
+          </button>
+
+          <Link
+            href="/admin/members?invite=true"
+            className="px-4 py-2.5 bg-[#CADA03] hover:bg-[#B8C702] text-[#0A0B0E] font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(202,218,3,0.3)] transition uppercase"
+          >
+            <UserPlus className="w-4 h-4 text-[#0A0B0E]" />
+            <span>Invite New Member</span>
+          </Link>
+        </div>
       </div>
 
       {/* Metrics Row */}
@@ -325,6 +339,12 @@ export default function AdminOverviewPage() {
           </div>
         </div>
       )}
+
+      {/* Entrance Check-In QR Poster Modal */}
+      <EntranceQrModal
+        isOpen={showEntranceQr}
+        onClose={() => setShowEntranceQr(false)}
+      />
     </div>
   );
 }

@@ -50,8 +50,16 @@ export default function CheckInPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Clean up camera on unmount
+  // Clean up camera on unmount & auto-trigger if opened via Entrance QR URL
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const codeParam = params.get('code');
+      const autoParam = params.get('auto');
+      if (codeParam || autoParam === '1') {
+        handleCheckIn(codeParam || 'BOXINN-ENTRANCE-YELAHANKA');
+      }
+    }
     return () => {
       stopCamera();
     };
