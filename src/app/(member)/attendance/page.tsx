@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { Calendar, Flame, Clock, CheckCircle2, ArrowLeft, Trophy } from 'lucide-react';
+import clsx from 'clsx';
 
 interface AttendanceRecord {
   id: string;
@@ -39,6 +40,23 @@ export default function AttendanceHistoryPage() {
     fetchHistory();
   }, []);
 
+  const activityDays = useMemo(() => {
+    const days = [];
+    const attendedSet = new Set(records.map((r) => r.gymDate));
+    const now = new Date();
+    const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(now);
+
+    for (let i = 27; i >= 0; i--) {
+      const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+      const dateStr = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(d);
+      const dayNum = parseInt(dateStr.split('-')[2], 10);
+      const isAttended = attendedSet.has(dateStr);
+      const isToday = dateStr === todayStr;
+      days.push({ dateStr, dayNum, isAttended, isToday });
+    }
+    return days;
+  }, [records]);
+
   return (
     <div className="space-y-5">
       {/* Header */}
@@ -74,6 +92,45 @@ export default function AttendanceHistoryPage() {
             <Trophy className="w-4 h-4 text-amber-400" />
             <span>{streak.longestStreak}d</span>
           </div>
+        </div>
+      </div>
+
+      {/* 28-Day Consistency Strip */}
+      <div className="bg-[#14171F] border border-[#2A303C] rounded-2xl p-4 sm:p-5 shadow-xl">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-[#94A3B8] flex items-center gap-1.5">
+            <Flame className="w-3.5 h-3.5 text-[#CADA03]" />
+            <span>28-Day Training Heatstrip</span>
+          </h2>
+          <div className="flex items-center gap-3 text-[10px] text-[#94A3B8]">
+            <div className="flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded bg-[#CADA03]" />
+              <span>Trained</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded bg-[#1D222E] border border-[#2A303C]" />
+              <span>Rest</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-7 sm:grid-cols-14 gap-1.5 pt-1">
+          {activityDays.map((d) => (
+            <div
+              key={d.dateStr}
+              title={`${d.dateStr}: ${d.isAttended ? 'Trained' : 'Rest'}`}
+              className={clsx(
+                'aspect-square rounded-lg flex flex-col items-center justify-center text-[10px] font-mono transition',
+                d.isAttended
+                  ? 'bg-[#CADA03] text-[#0A0B0E] font-black shadow-[0_0_8px_rgba(202,218,3,0.35)]'
+                  : d.isToday
+                  ? 'bg-[#1D222E] text-[#F8F9FA] border border-[#CADA03]/50'
+                  : 'bg-[#14171F] text-[#94A3B8]/60 border border-[#2A303C]'
+              )}
+            >
+              <span>{d.dayNum}</span>
+            </div>
+          ))}
         </div>
       </div>
 

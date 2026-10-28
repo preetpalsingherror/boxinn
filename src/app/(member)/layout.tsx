@@ -15,6 +15,7 @@ export default function MemberLayout({
   const router = useRouter();
   const [checking, setChecking] = useState(true);
   const [authorized, setAuthorized] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
     async function verifyMember() {
@@ -24,6 +25,8 @@ export default function MemberLayout({
           window.location.href = '/login';
           return;
         }
+        const data = await res.json();
+        setUserRole(data.data?.user?.role || 'MEMBER');
         setAuthorized(true);
       } catch {
         window.location.href = '/login';
@@ -77,12 +80,14 @@ export default function MemberLayout({
           </Link>
 
           <div className="flex items-center gap-2">
-            <Link
-              href="/admin"
-              className="text-[11px] font-bold text-[#94A3B8] hover:text-[#CADA03] px-2.5 py-1 rounded-md bg-[#14171F] border border-[#2A303C] hover:border-[#CADA03]/40 transition"
-            >
-              Admin Mode
-            </Link>
+            {userRole === 'ADMIN' && (
+              <Link
+                href="/admin"
+                className="text-[11px] font-bold text-[#94A3B8] hover:text-[#CADA03] px-2.5 py-1 rounded-md bg-[#14171F] border border-[#2A303C] hover:border-[#CADA03]/40 transition"
+              >
+                Admin Mode
+              </Link>
+            )}
             <button
               onClick={handleLogout}
               title="Sign Out"
