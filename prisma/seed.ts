@@ -1,9 +1,15 @@
 import { prisma } from '../src/infrastructure/db/client.ts';
 import { hashPassword } from '../src/infrastructure/security/password-service.ts';
 import { generateSecureToken, hashToken } from '../src/infrastructure/security/token-service.ts';
+import { toGymLocalDate, addCalendarDays } from '../src/domain/common/date-utils.ts';
 
 async function main() {
   console.log('Seeding fictional test data for BOX INN Member Companion...');
+  const today = toGymLocalDate(new Date());
+  const dMinus1 = addCalendarDays(today, -1);
+  const dMinus2 = addCalendarDays(today, -2);
+  const dMinus3 = addCalendarDays(today, -3);
+  const dMinus4 = addCalendarDays(today, -4);
 
   // 1. Fictional Admin Account
   const adminPasswordHash = await hashPassword('AdminPass123!');
@@ -81,20 +87,20 @@ async function main() {
     update: {
       currentStreak: 4,
       longestStreak: 7,
-      lastAttendanceDate: '2026-10-25',
-      streakStartDate: '2026-10-22',
+      lastAttendanceDate: dMinus1,
+      streakStartDate: dMinus4,
     },
     create: {
       userId: preetMember.id,
       currentStreak: 4,
       longestStreak: 7,
-      lastAttendanceDate: '2026-10-25',
-      streakStartDate: '2026-10-22',
+      lastAttendanceDate: dMinus1,
+      streakStartDate: dMinus4,
     },
   });
 
   // Attendance history for Preetpal
-  const preetSampleDates = ['2026-10-22', '2026-10-23', '2026-10-24', '2026-10-25'];
+  const preetSampleDates = [dMinus4, dMinus3, dMinus2, dMinus1];
   for (const date of preetSampleDates) {
     const checkIn = new Date(`${date}T01:30:00.000Z`);
     const checkOut = new Date(`${date}T03:00:00.000Z`);
@@ -118,13 +124,16 @@ async function main() {
   // Membership for Aarav
   await prisma.membership.upsert({
     where: { id: '00000000-0000-0000-0000-000000000001' },
-    update: {},
+    update: {
+      status: 'ACTIVE',
+      expiryDate: addCalendarDays(today, 35),
+    },
     create: {
       id: '00000000-0000-0000-0000-000000000001',
       userId: member.id,
       planName: 'General Training (CrossFit & HYROX)',
-      startDate: '2026-10-01',
-      expiryDate: '2026-11-30',
+      startDate: addCalendarDays(today, -25),
+      expiryDate: addCalendarDays(today, 35),
       status: 'ACTIVE',
       notes: 'Quarterly membership package',
     },
@@ -133,18 +142,23 @@ async function main() {
   // Streaks for Aarav
   await prisma.memberStreak.upsert({
     where: { userId: member.id },
-    update: {},
+    update: {
+      currentStreak: 3,
+      longestStreak: 5,
+      lastAttendanceDate: dMinus1,
+      streakStartDate: dMinus3,
+    },
     create: {
       userId: member.id,
       currentStreak: 3,
       longestStreak: 5,
-      lastAttendanceDate: '2026-10-23',
-      streakStartDate: '2026-10-21',
+      lastAttendanceDate: dMinus1,
+      streakStartDate: dMinus3,
     },
   });
 
   // Attendance history for Aarav
-  const sampleDates = ['2026-10-21', '2026-10-22', '2026-10-23'];
+  const sampleDates = [dMinus3, dMinus2, dMinus1];
   for (const date of sampleDates) {
     const checkIn = new Date(`${date}T01:30:00.000Z`); // 07:00 AM IST (+5:30)
     const checkOut = new Date(`${date}T03:00:00.000Z`); // 08:30 AM IST
@@ -274,6 +288,33 @@ async function main() {
           formCues: JSON.stringify(['Keep barbell tight to shins and thighs', 'Reach full vertical hip extension before pull-under', 'Punch up aggressively on catch']),
           safetyPrecautions: 'Always secure plates with spring collar clips. Keep drop perimeter clear of extra equipment.',
           videoUrl: 'https://www.youtube-nocookie.com/embed/O00_Hk-4G-k',
+          trainerName: 'Vikram',
+        },
+      ],
+    },
+    {
+      code: 'M-CABLE-01',
+      name: 'Dual Adjustable Pulley Cable Station',
+      category: 'Strength / Functional Cables',
+      location: 'Main Strength Floor — Bay 2',
+      description: 'Dual weight-stack adjustable pulley tower for upper-body isolation, rotational core work, and multi-planar resistance training.',
+      exercises: [
+        {
+          title: 'Rope Triceps Pushdown',
+          targetMuscleGroup: 'Triceps Brachii (Lateral & Long Head)',
+          instructions: 'Attach the double rope handle to the high pulley setting. Pin elbows tight against your ribs with a slight athletic hip hinge, then extend forearms downward and flare the rope ends apart at full lockout.',
+          formCues: JSON.stringify(['Pin elbows firmly to your sides', 'Flare rope handles outward at bottom lockout', 'Control the eccentric return to 90 degrees']),
+          safetyPrecautions: 'Do not let your elbows drift forward or shrug your shoulders toward your ears.',
+          videoUrl: 'https://www.youtube-nocookie.com/embed/vB5OHsJ3EME',
+          trainerName: 'Vikram',
+        },
+        {
+          title: 'Standing High-to-Low Cable Chest Fly',
+          targetMuscleGroup: 'Pectoralis Major / Anterior Deltoid / Core',
+          instructions: 'Set both pulleys above shoulder height and attach single D-handles. Step forward into a staggered stance for stability with a soft bend in both elbows, then sweep handles down and together in front of your lower chest.',
+          formCues: JSON.stringify(['Maintain a fixed soft bend in the elbows', 'Squeeze pecs together for 1 full second at peak contraction', 'Keep ribcage stacked over pelvis']),
+          safetyPrecautions: 'Avoid over-extending shoulders behind your torso line at the top of the stretch.',
+          videoUrl: 'https://www.youtube-nocookie.com/embed/Iwe6AmxVf7o',
           trainerName: 'Vikram',
         },
       ],
