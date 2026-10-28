@@ -17,6 +17,7 @@ import { GET as healthHandler } from '../../src/app/api/health/route.ts';
 import { POST as cronReconcileHandler } from '../../src/app/api/cron/reconcile/route.ts';
 import { SESSION_COOKIE_NAME, CSRF_COOKIE_NAME, CSRF_HEADER_NAME, setAuthCookies } from '../../src/presentation/security/cookie-service.ts';
 import { hashPassword } from '../../src/infrastructure/security/password-service.ts';
+import { toGymLocalDate, addCalendarDays } from '../../src/domain/common/date-utils.ts';
 
 describe('Integration: Member & Admin API Endpoints, Workflows, and Health', () => {
   let memberSessionCookie = '';
@@ -54,6 +55,9 @@ describe('Integration: Member & Admin API Endpoints, Workflows, and Health', () 
     adminSessionCookie = `${adminSessionPart}; ${adminCsrfPart}`;
 
     // 3. Create active member with active membership and streak
+    const today = toGymLocalDate(new Date());
+    const yesterday = addCalendarDays(today, -1);
+
     const member = await prisma.user.create({
       data: {
         email: memberEmail,
@@ -71,7 +75,7 @@ describe('Integration: Member & Admin API Endpoints, Workflows, and Health', () 
           },
         },
         streak: {
-          create: { currentStreak: 2, longestStreak: 5, lastAttendanceDate: '2026-10-23' },
+          create: { currentStreak: 2, longestStreak: 5, lastAttendanceDate: yesterday },
         },
       },
     });
