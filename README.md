@@ -1,172 +1,150 @@
-# BOX INN Member Companion
+# 🥊 BOX INN Companion — Building Software for My Local Gym in Public
 
-A private, modern web application for members and staff of **BOX INN**, Puttenahalli, Yelahanka, Bengaluru. It serves as a companion to the main gym website and provides a member portal alongside an administrative management dashboard.
+> **By Preetpal Singh** — *3rd Year Computer Science & Engineering Student*  
+> **Built for:** **BOX INN Fitness & Conditioning**, Puttenahalli, Yelahanka, Bengaluru (`Asia/Kolkata`)  
+> **Live Demo URL:** [https://launched-steering-shaft-yield.trycloudflare.com](https://launched-steering-shaft-yield.trycloudflare.com)
 
 ---
 
-## ⚡ Live Demo & Preview
+## 💡 The Story: Why I Built This Instead of Another Toy Project
 
-> **Live Preview URL**: [https://scout-eugene-norman-poll.trycloudflare.com](https://scout-eugene-norman-poll.trycloudflare.com)  
-> **Official Gym**: BOX INN, Puttenahalli, Yelahanka, Bengaluru  
-> **Direct Mobile Access**: Scan or open the link on any phone or laptop.
+As a 3rd-year engineering student training regularly at **BOX INN in Yelahanka**, I noticed that while our coaching and equipment on the floor were top-tier, the day-to-day operations still had classic local-gym friction:
 
-### 🔑 Demo Login Accounts
+1. **Front-Desk & Renewal Chaos**: Tracking whose membership was expiring meant digging through spreadsheets or registers and manually typing out WhatsApp reminders one by one.
+2. **Coaches Repeating the Same Machine Setup Cues**: During peak evening hours (6 PM – 8 PM), new members constantly had to wait to ask a trainer *"How do I set the damper on the Concept2 RowErg?"* or *"How do I adjust the dual cable station for triceps pushdowns vs. chest flys?"*
+3. **"Is the Gym Crowded Right Now?"**: Students and working professionals around Yelahanka had no way to check live gym floor crowd levels before walking over.
+4. **Expensive Hardware Turnstiles weren't worth it**: Biometric scanners fail with chalky/sweaty hands after deadlifts and cost ₹50,000+ to install and maintain.
 
-| Role | Username / Registered Email | Password | Access Details |
+So I went to the gym staff, asked what they actually needed, and started **building the BOX INN Member & Operations Companion in public**—iterating week by week from real feedback on the gym floor until it was 100% production-ready.
+
+---
+
+## ⚡ Try the Live App Right Now
+
+> 🌐 **Live Production URL:** [https://launched-steering-shaft-yield.trycloudflare.com](https://launched-steering-shaft-yield.trycloudflare.com)
+
+### 🔑 Test Accounts (Strict Role Separation)
+
+In a real gym, a member should never touch admin tools, and the front-desk admin portal shouldn't be mixed up with a personal workout profile. Both portals are strictly isolated at the layout and API levels:
+
+| Persona | Login Handle / Email | Password | What to Explore |
 | :--- | :--- | :--- | :--- |
-| **Member (Preetpal)** | `preet` *(or `preet@boxinn.local`)* | `preetpal` | Member dashboard, 4-day streak, QR check-in, attendance calendar |
-| **Member (Aarav)** | `aarav@boxinn.local` | `MemberPass123!` | Alternative member account |
-| **Staff Admin / Owner** | `admin@boxinn.local` | `AdminPass123!` | Gym management dashboard, member directory, attendance audits, machine manager |
+| **Member (My Account)** | `preet` *(or `preet@boxinn.local`)* | `preetpal` | 4-day active streak, live floor occupancy, in-app QR check-in camera, attendance heatmap |
+| **Member (Demo Athlete)** | `aarav@boxinn.local` | `MemberPass123!` | 3-day active streak, membership progress bar, equipment & video library |
+| **Staff Admin / Head Coach** | `admin` *(or `admin@boxinn.local`)* | `AdminPass123!` | Live gym floor ops, Entrance QR Poster generator, 1-click WhatsApp renewals, multi-exercise machine manager |
 
-### 🏋️ Direct Scanned Machine Guide Links
-* **Machine Catalog**: [https://scout-eugene-norman-poll.trycloudflare.com/machines](https://scout-eugene-norman-poll.trycloudflare.com/machines)
-* **Concept2 RowErg Guide**: [https://scout-eugene-norman-poll.trycloudflare.com/machines/M-ROW-01](https://scout-eugene-norman-poll.trycloudflare.com/machines/M-ROW-01)
-* **Rogue Echo Fan Bike**: [https://scout-eugene-norman-poll.trycloudflare.com/machines/M-BIKE-01](https://scout-eugene-norman-poll.trycloudflare.com/machines/M-BIKE-01)
-* **Concept2 SkiErg**: [https://scout-eugene-norman-poll.trycloudflare.com/machines/M-SKI-01](https://scout-eugene-norman-poll.trycloudflare.com/machines/M-SKI-01)
-* **Olympic Lifting Rig**: [https://scout-eugene-norman-poll.trycloudflare.com/machines/M-OLY-01](https://scout-eugene-norman-poll.trycloudflare.com/machines/M-OLY-01)
-* **Staff Admin Portal**: [https://scout-eugene-norman-poll.trycloudflare.com/admin](https://scout-eugene-norman-poll.trycloudflare.com/admin)
-
----
-
-## Features
-
-### Member Portal
-
-* **Dashboard**: Personalized welcome, active streak tracking, visit count, announcements, and current membership status.
-* **QR Check-in**: Check-in mechanism with duplicate scan prevention and validation against membership eligibility.
-* **Progress & History**: Attendance calendar, historical visit logs, and streak metrics.
-* **Exercise & Machine Library**: Equipment instructions, safety notes, form cues, and QR-accessible machine guide pages.
-* **Profile & Security**: Member profile management, password updates, and session logout controls.
-
-### Admin Portal
-
-* **Overview & Metrics**: Database-backed counts of active members, expiring memberships, and daily check-ins.
-* **Member & Membership Management**: Directory search, two-stage invitation creation/revocation, renewals, and administrative status controls (freeze, suspend, activate).
-* **Attendance Corrections**: Manual visit corrections with mandatory reasons and immutable audit log tracking.
-* **Content Management**: Exercise guide updates, machine QR destination management, and gym announcements.
+### 🏋️ Direct Equipment QR Links (What happens when you scan a machine sticker)
+* **All Gym Stations**: [/machines](https://launched-steering-shaft-yield.trycloudflare.com/machines)
+* **Dual Adjustable Cable Station (Multi-Exercise + Videos)**: [/machines/M-CABLE-01](https://launched-steering-shaft-yield.trycloudflare.com/machines/M-CABLE-01)
+* **Concept2 RowErg (HYROX / Conditioning)**: [/machines/M-ROW-01](https://launched-steering-shaft-yield.trycloudflare.com/machines/M-ROW-01)
+* **Rogue Echo Fan Bike**: [/machines/M-BIKE-01](https://launched-steering-shaft-yield.trycloudflare.com/machines/M-BIKE-01)
+* **Concept2 SkiErg Station**: [/machines/M-SKI-01](https://launched-steering-shaft-yield.trycloudflare.com/machines/M-SKI-01)
+* **Olympic Lifting Platform & Rig**: [/machines/M-OLY-01](https://launched-steering-shaft-yield.trycloudflare.com/machines/M-OLY-01)
 
 ---
 
-## Core Domain Rules
+## 🛠️ Build-in-Public Log: How the Idea Evolved with Gym Feedback
 
-* **Timezone**: All local operations, calendar days, and timestamps are anchored to `Asia/Kolkata`.
-* **Attendance & Check-in**:
-  * Maximum of one attendance record per member per calendar day, enforced at the database level.
-  * Sessions automatically close 3 hours after check-in.
-  * Duplicate scans on the same day provide friendly notices without creating extra records.
-* **Membership Validity**:
-  * Inclusive through the recorded expiry date; access is cut off strictly at `00:00` the following day.
-  * No automatic grace period.
-  * Suspended, frozen, or future-dated memberships cannot check in.
-* **Streak Calculation**:
-  * Increments on consecutive attendance days.
-  * Preserved across 1 to 3 intervening absent calendar days.
-  * Resets after 4 consecutive absent calendar days.
-  * Longest streak and historical records are preserved.
-  * Admin corrections deterministically recalculate streaks within a database transaction.
+### Iteration 1 — Solving the "Weekend Rest Day" Streak Problem
+Most habit apps kill your streak if you miss a single day. In strength and CrossFit/HYROX training, **rest days are mandatory**—if a member trains Friday and comes back Tuesday, losing their streak demotivates them.
+* **What I built**: A deterministic **Consistency Streak Engine** (`src/domain/`) pinned to `Asia/Kolkata` that preserves a member's active streak across **1 to 3 intervening rest days**, and only resets on the **4th consecutive absent day** (while preserving their all-time `longestStreak`).
+* **Retroactive Admin Fix**: If a member's phone died and the coach logs their past visit later in `/admin/attendance`, the entire historical streak recalculates deterministically inside an atomic PostgreSQL transaction.
 
----
+### Iteration 2 — ₹0 Hardware Cost Entrance Check-In & Live Crowd Meter
+Instead of buying a fingerprint scanner, we turned the reception desk into a QR check-in station.
+* **Admin Entrance QR Poster Generator**: From `/admin`, staff can generate and print an official A4 **BOX INN Reception Check-In Poster** (`BOXINN-ENTRANCE-YELAHANKA`) in one click.
+* **In-App Camera + Auto Deep-Link Check-In**: Members can scan using the built-in browser camera on `/checkin` or their phone's native camera app. Scanning twice on the same day is idempotent—it shows a friendly confirmation instead of creating duplicate entries.
+* **Live Floor Occupancy Counter**: Every check-in opens a **3-hour active floor window**. Both `/home` and `/admin` calculate how many athletes are currently training right now and display a live *Quiet / Moderate / Peak Hours* indicator.
 
-## Tech Stack & Architecture
+### Iteration 3 — Multi-Exercise Station Stickers & Embedded Video Coaching
+When I first showed the machine directory to the gym, we realized a single station (like a Cable Crossover Tower or Lifting Rig) isn't used for just one movement—members do *Triceps Pushdowns*, *High-to-Low Chest Flys*, *Face Pulls*, etc. on the same station.
+* **Multiple Exercises per Station**: Upgraded the schema and `/admin/machines` UI so coaches can attach **multiple exercises** to any single machine station, edit/delete machines they don't want, and paste any YouTube, YouTube Shorts, or Vimeo link (automatically normalized to a clean privacy-enhanced embed player).
+* **Printable QR Sticker Sheet**: Added a `"Print QR Labels"` view in `/admin/machines` that lays out scannable SVG QR stickers with the BOX INN branding, ready to laminate and stick onto every machine in the gym.
 
-* **Framework**: Next.js App Router (React, TypeScript strict mode)
-* **Database & ORM**: PostgreSQL with Prisma
-* **Styling**: Tailwind CSS and Lucide icons
-* **Security & Auth**:
-  * Two-stage invitation and email verification
-  * SHA-256 hashed session persistence and atomic token redemption
-  * PostgreSQL-backed atomic rate limiting
-  * CSRF protection and secure session cookie handling (`HttpOnly`, `SameSite=Lax`, `Path=/`)
-* **Testing**: Node.js test runner for domain unit/integration suites and Playwright for browser flows
+### Iteration 4 — 1-Click WhatsApp Renewals & Zero-Lag Production Speed
+* **1-Click WhatsApp Renewal Generator**: In `/admin` and `/admin/members`, any member whose plan is expiring soon or expired gets a direct WhatsApp button that opens `wa.me` with their phone number and a personalized renewal message pre-filled—saving the front desk hours every month.
+* **Eliminating UI Lag**: Moved layout role verification to a `sessionStorage` fast-path with background re-validation and route prefetching (`prefetch={true}`), served via a compiled Next.js production build for `<15ms` page transitions.
 
 ---
 
-## Getting Started
+## 📊 Real Impact for BOX INN Yelahanka
 
-### Prerequisites
+| Gym Problem Before | How BOX INN Companion Solves It |
+| :--- | :--- |
+| Biometric scanner errors with chalky/sweaty hands | **QR Entrance Poster + Smartphone Check-In** (₹0 hardware cost, works in 1 second) |
+| Chasing expiring members manually on WhatsApp | **1-Click WhatsApp Renewal Generator** + instant **`+30d` Audited Renewal** button |
+| Beginners unsure how to use rowers, ski-ergs, or cables | **Scannable QR Stickers on Machines** opening multi-exercise tabs with embedded video tutorials & safety cues |
+| Members showing up during overcrowded peak slots | **Live Gym Floor Occupancy Counter** based on active 3-hour check-in sessions |
+| Shared/confusing admin vs. member views | **Strict Role Isolation** (`ADMIN` vs `MEMBER`) with database-backed sessions, CSRF protection, and audit logs |
 
-* Node.js (v20+ recommended)
-* PostgreSQL database instance
-* npm
+---
 
-### 1. Clone & Install Dependencies
+## 🧠 Under the Hood (Engineering & Architecture)
 
+Even though this started as a college project for my gym, I engineered it with production-grade backend practices:
+
+* **Framework**: Next.js 15 App Router (React 19, TypeScript in strict mode)
+* **Database**: PostgreSQL 18 + Prisma ORM with serializable/atomic transactions for check-ins, token redemptions, and streak recalculations
+* **Security built from scratch (No black-box auth)**:
+  * Two-stage member onboarding (Admin Invite -> Member Password Claim -> Email Token Verification)
+  * SHA-256 hashed `SessionRecord` tokens in `HttpOnly`, `SameSite=Lax` cookies with instant server-side revocation
+  * Double-Submit Cookie CSRF protection on all mutating endpoints (`POST`, `PUT`, `DELETE`)
+  * Atomic PostgreSQL sliding-window rate limiter (`RateLimitBucket`)
+* **Automated Testing (78 Tests Passing)**:
+  * **39 Unit Tests**: Testing inclusive midnight IST membership expiry cutoffs, leap-year calendar math, 3-hour session auto-closure, and the 3-day rest-day streak matrix.
+  * **39 Integration & Concurrency Tests**: Testing parallel check-in race conditions (`Promise.all`), concurrent token redemptions, rate-limit bucket exhaustion, and role guards against a live PostgreSQL database.
+
+```text
+src/
+├── domain/           # Pure business rules (streaks, inclusive expiry, IST dates, 3h sessions)
+├── application/      # Use-case services (auth, attendance, invitations, admin actions)
+├── infrastructure/   # Prisma client, PostgreSQL rate limiter, password & token hashing
+├── presentation/     # Cookie/CSRF security guards & request validation
+├── app/              # Next.js App Router (strictly separated (member) and admin portals)
+tests/
+├── unit/             # 39 fast domain unit tests
+└── integration/      # 39 PostgreSQL integration & concurrency race tests
+```
+
+---
+
+## 🚀 Running It Locally
+
+### 1. Clone & Install
 ```bash
-git clone <repository-url>
+git clone https://github.com/preetpalsingherror/boxinn.git
 cd boxinn
 npm install
 ```
 
-### 2. Environment Configuration
-
-Copy the sample environment file and configure your local settings:
-
+### 2. Configure `.env`
 ```bash
 cp .env.example .env
 ```
-
-Ensure your `DATABASE_URL` points to your local PostgreSQL development instance:
-
+Point `DATABASE_URL` to your local PostgreSQL instance:
 ```env
-DATABASE_URL="postgresql://user:password@localhost:5432/boxinn_dev?schema=public"
-NODE_ENV="development"
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/boxinn_dev?schema=public"
 APP_ORIGIN="http://localhost:3000"
 ```
 
-### 3. Database Setup & Migrations
-
-Run Prisma migrations and populate the database with development seed data:
-
+### 3. Migrate & Seed the Gym Data
 ```bash
 npx prisma migrate dev
 npm run prisma:seed
 ```
 
-> *Note: Seed data contains only fictional users and `@boxinn.local` email addresses.*
-
-### 4. Run Development Server
-
+### 4. Run Tests & Start Server
 ```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-## Testing
-
-Run tests against a dedicated local test database:
-
-```bash
-# Run domain unit tests (39 tests)
+# Run strict TypeScript check + all 78 unit & integration tests
+npm run typecheck
 npm test
-
-# Run database integration tests (36 tests)
 npm run test:integration
 
-# Type check
-npm run typecheck
-
-# Production build check
+# Run in zero-lag production mode
 npm run build
+npm run start
 ```
 
 ---
 
-## Project Structure
-
-```text
-src/
-├── domain/           # Pure business rules (streaks, membership validity, dates)
-├── application/      # Use cases & workflows (auth, attendance, invitations)
-├── infrastructure/   # Database (Prisma), rate-limiting, security & cookies
-├── presentation/     # Route handlers, middleware guards & validation schemas
-├── app/              # Next.js App Router pages (portal, admin, auth)
-tests/
-├── unit/             # Pure domain unit tests
-├── integration/      # Database-backed integration tests
-docs/
-├── architecture-plan.md     # Architectural specifications & security design
-└── setup-and-operations.md  # Detailed setup, operations & deployment guide
-```
+*Built with grit in Yelahanka, Bengaluru — if you're a student building software for real local businesses around you, feel free to star ⭐ the repo or reach out!*
