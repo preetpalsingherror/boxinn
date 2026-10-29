@@ -2,7 +2,7 @@
 
 > **By Preetpal Singh** — *3rd Year Computer Science & Engineering Student*  
 > **Built for:** **BOX INN Fitness & Conditioning**, Puttenahalli, Yelahanka, Bengaluru (`Asia/Kolkata`)  
-> **Live Demo URL:** [https://launched-steering-shaft-yield.trycloudflare.com](https://launched-steering-shaft-yield.trycloudflare.com)
+> **Live Demo URL:** [https://provision-farms-reviewed-launch.trycloudflare.com](https://provision-farms-reviewed-launch.trycloudflare.com)
 
 ---
 
@@ -21,7 +21,7 @@ So I went to the gym staff, asked what they actually needed, and started **build
 
 ## ⚡ Try the Live App Right Now
 
-> 🌐 **Live Production URL:** [https://launched-steering-shaft-yield.trycloudflare.com](https://launched-steering-shaft-yield.trycloudflare.com)
+> 🌐 **Live Production URL:** [https://provision-farms-reviewed-launch.trycloudflare.com](https://provision-farms-reviewed-launch.trycloudflare.com)
 
 ### 🔑 Test Accounts (Strict Role Separation)
 
@@ -34,12 +34,12 @@ In a real gym, a member should never touch admin tools, and the front-desk admin
 | **Staff Admin / Head Coach** | `admin` *(or `admin@boxinn.local`)* | `AdminPass123!` | Live gym floor ops, Entrance QR Poster generator, 1-click WhatsApp renewals, multi-exercise machine manager |
 
 ### 🏋️ Direct Equipment QR Links (What happens when you scan a machine sticker)
-* **All Gym Stations**: [/machines](https://launched-steering-shaft-yield.trycloudflare.com/machines)
-* **Dual Adjustable Cable Station (Multi-Exercise + Videos)**: [/machines/M-CABLE-01](https://launched-steering-shaft-yield.trycloudflare.com/machines/M-CABLE-01)
-* **Concept2 RowErg (HYROX / Conditioning)**: [/machines/M-ROW-01](https://launched-steering-shaft-yield.trycloudflare.com/machines/M-ROW-01)
-* **Rogue Echo Fan Bike**: [/machines/M-BIKE-01](https://launched-steering-shaft-yield.trycloudflare.com/machines/M-BIKE-01)
-* **Concept2 SkiErg Station**: [/machines/M-SKI-01](https://launched-steering-shaft-yield.trycloudflare.com/machines/M-SKI-01)
-* **Olympic Lifting Platform & Rig**: [/machines/M-OLY-01](https://launched-steering-shaft-yield.trycloudflare.com/machines/M-OLY-01)
+* **All Gym Stations**: [/machines](https://provision-farms-reviewed-launch.trycloudflare.com/machines)
+* **Dual Adjustable Cable Station (Multi-Exercise + Videos)**: [/machines/M-CABLE-01](https://provision-farms-reviewed-launch.trycloudflare.com/machines/M-CABLE-01)
+* **Concept2 RowErg (HYROX / Conditioning)**: [/machines/M-ROW-01](https://provision-farms-reviewed-launch.trycloudflare.com/machines/M-ROW-01)
+* **Rogue Echo Fan Bike**: [/machines/M-BIKE-01](https://provision-farms-reviewed-launch.trycloudflare.com/machines/M-BIKE-01)
+* **Concept2 SkiErg Station**: [/machines/M-SKI-01](https://provision-farms-reviewed-launch.trycloudflare.com/machines/M-SKI-01)
+* **Olympic Lifting Platform & Rig**: [/machines/M-OLY-01](https://provision-farms-reviewed-launch.trycloudflare.com/machines/M-OLY-01)
 
 ---
 
