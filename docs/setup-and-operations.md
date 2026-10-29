@@ -79,7 +79,7 @@ The seed script creates the following accounts (supporting both email and short 
 
 | Role | Handle / Email | Password | Details |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin` *(or `admin@boxinn.local`)* | `AdminPass123!` | Head Coach Vikram (strictly routed to `/admin` operations portal) |
+| **Admin** | `admin` *(or `admin@boxinn.local`)* | *(Private — BOX INN Staff Only)* | Head Coach Vikram (strictly routed to `/admin` operations portal) |
 | **Member** | `preet` *(or `preet@boxinn.local`)* | `preetpal` | Active athlete with 4-day active streak, annual membership, and visit history |
 | **Member** | `aarav@boxinn.local` | `MemberPass123!` | Active member with 3-day active streak and valid quarterly membership |
 | **Pending** | `diya@boxinn.local` | *(Not set)* | Account in `PENDING_VERIFICATION` status for onboarding flow testing |

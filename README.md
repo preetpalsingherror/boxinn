@@ -58,7 +58,7 @@ In a real gym, a member should never touch admin tools, and the front-desk admin
 | :--- | :--- | :--- | :--- |
 | **Member (My Account)** | `preet` *(or `preet@boxinn.local`)* | `preetpal` | 4-day active streak, live floor occupancy, in-app QR check-in camera, attendance heatmap |
 | **Member (Demo Athlete)** | `aarav@boxinn.local` | `MemberPass123!` | 3-day active streak, membership progress bar, equipment & video library |
-| **Staff Admin / Head Coach** | `admin` *(or `admin@boxinn.local`)* | `AdminPass123!` | Live gym floor ops, Entrance QR Poster generator, 1-click WhatsApp renewals, multi-exercise machine manager |
+| **Staff Admin / Head Coach** | `admin` *(or `admin@boxinn.local`)* | *(Private — Shared with BOX INN Staff)* | Live gym floor ops, Entrance QR Poster generator, 1-click WhatsApp renewals, multi-exercise machine manager |
 
 ### 🏋️ Direct Equipment QR Links (What happens when you scan a machine sticker)
 * **All Gym Stations**: [/machines](https://boxinn.vercel.app/machines)
