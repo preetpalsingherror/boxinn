@@ -18,8 +18,8 @@
 <br/>
 <br/>
 
-[![Gym Facility](https://img.shields.io/badge/FACILITY-BOX_INN_YELAHANKA-CADA03?style=for-the-badge&labelColor=0A0B0E&logoColor=CADA03)](https://provision-farms-reviewed-launch.trycloudflare.com)
-[![Motto](https://img.shields.io/badge/ESTD_2026-RISE_ABOVE_THE_AVERAGE-F8F9FA?style=for-the-badge&labelColor=14171F)](https://provision-farms-reviewed-launch.trycloudflare.com)
+[![Gym Facility](https://img.shields.io/badge/FACILITY-BOX_INN_YELAHANKA-CADA03?style=for-the-badge&labelColor=0A0B0E&logoColor=CADA03)](https://considers-arizona-increase-icq.trycloudflare.com)
+[![Motto](https://img.shields.io/badge/ESTD_2026-RISE_ABOVE_THE_AVERAGE-F8F9FA?style=for-the-badge&labelColor=14171F)](https://considers-arizona-increase-icq.trycloudflare.com)
 [![Tests](https://img.shields.io/badge/TESTS-78%2F78_PASSING-10B981?style=for-the-badge&labelColor=0A0B0E)](tests/)
 [![Stack](https://img.shields.io/badge/STACK-NEXT.JS_15_%E2%80%A2_POSTGRESQL_18-38BDF8?style=for-the-badge&labelColor=0A0B0E)](package.json)
 
@@ -27,7 +27,7 @@
 
 **By Preetpal Singh** — *3rd Year Computer Science & Engineering Student*  
 **Built for:** **BOX INN Fitness & Conditioning**, Puttenahalli, Yelahanka, Bengaluru (`Asia/Kolkata`)  
-**Live Demo URL:** [**https://provision-farms-reviewed-launch.trycloudflare.com**](https://provision-farms-reviewed-launch.trycloudflare.com)
+**Live Demo URL:** [**https://considers-arizona-increase-icq.trycloudflare.com**](https://considers-arizona-increase-icq.trycloudflare.com)
 
 </div>
 
@@ -48,7 +48,7 @@ So I went to the gym staff, asked what they actually needed, and started **build
 
 ## ⚡ Try the Live App Right Now
 
-> 🌐 **Live Production URL:** [https://provision-farms-reviewed-launch.trycloudflare.com](https://provision-farms-reviewed-launch.trycloudflare.com)
+> 🌐 **Live Production URL:** [https://considers-arizona-increase-icq.trycloudflare.com](https://considers-arizona-increase-icq.trycloudflare.com)
 
 ### 🔑 Test Accounts (Strict Role Separation)
 
@@ -61,12 +61,12 @@ In a real gym, a member should never touch admin tools, and the front-desk admin
 | **Staff Admin / Head Coach** | `admin` *(or `admin@boxinn.local`)* | `AdminPass123!` | Live gym floor ops, Entrance QR Poster generator, 1-click WhatsApp renewals, multi-exercise machine manager |
 
 ### 🏋️ Direct Equipment QR Links (What happens when you scan a machine sticker)
-* **All Gym Stations**: [/machines](https://provision-farms-reviewed-launch.trycloudflare.com/machines)
-* **Dual Adjustable Cable Station (Multi-Exercise + Videos)**: [/machines/M-CABLE-01](https://provision-farms-reviewed-launch.trycloudflare.com/machines/M-CABLE-01)
-* **Concept2 RowErg (HYROX / Conditioning)**: [/machines/M-ROW-01](https://provision-farms-reviewed-launch.trycloudflare.com/machines/M-ROW-01)
-* **Rogue Echo Fan Bike**: [/machines/M-BIKE-01](https://provision-farms-reviewed-launch.trycloudflare.com/machines/M-BIKE-01)
-* **Concept2 SkiErg Station**: [/machines/M-SKI-01](https://provision-farms-reviewed-launch.trycloudflare.com/machines/M-SKI-01)
-* **Olympic Lifting Platform & Rig**: [/machines/M-OLY-01](https://provision-farms-reviewed-launch.trycloudflare.com/machines/M-OLY-01)
+* **All Gym Stations**: [/machines](https://considers-arizona-increase-icq.trycloudflare.com/machines)
+* **Dual Adjustable Cable Station (Multi-Exercise + Videos)**: [/machines/M-CABLE-01](https://considers-arizona-increase-icq.trycloudflare.com/machines/M-CABLE-01)
+* **Concept2 RowErg (HYROX / Conditioning)**: [/machines/M-ROW-01](https://considers-arizona-increase-icq.trycloudflare.com/machines/M-ROW-01)
+* **Rogue Echo Fan Bike**: [/machines/M-BIKE-01](https://considers-arizona-increase-icq.trycloudflare.com/machines/M-BIKE-01)
+* **Concept2 SkiErg Station**: [/machines/M-SKI-01](https://considers-arizona-increase-icq.trycloudflare.com/machines/M-SKI-01)
+* **Olympic Lifting Platform & Rig**: [/machines/M-OLY-01](https://considers-arizona-increase-icq.trycloudflare.com/machines/M-OLY-01)
 
 ---
 
