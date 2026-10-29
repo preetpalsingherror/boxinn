@@ -75,32 +75,42 @@ The BOX INN Member Companion is a private, mobile-first web application designed
 
 ## 3. Seed Accounts & Credentials
 
-The seed script creates the following fictional accounts for local development and QA testing:
+The seed script creates the following accounts (supporting both email and short handle login aliases) for local development, demos, and QA testing:
 
-| Role | Email | Password | Details |
+| Role | Handle / Email | Password | Details |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin@boxinn.local` | `AdminPass123!` | Head Coach Vikram (full admin privileges) |
-| **Member** | `aarav@boxinn.local` | `MemberPass123!` | Active member with 3-day active streak and valid membership |
+| **Admin** | `admin` *(or `admin@boxinn.local`)* | `AdminPass123!` | Head Coach Vikram (strictly routed to `/admin` operations portal) |
+| **Member** | `preet` *(or `preet@boxinn.local`)* | `preetpal` | Active athlete with 4-day active streak, annual membership, and visit history |
+| **Member** | `aarav@boxinn.local` | `MemberPass123!` | Active member with 3-day active streak and valid quarterly membership |
 | **Pending** | `diya@boxinn.local` | *(Not set)* | Account in `PENDING_VERIFICATION` status for onboarding flow testing |
+
+### Key Operational & Floor Companion Features
+- **Strict Role & Portal Isolation**: `ADMIN` accounts are strictly confined to `/admin/*` (and blocked with `403 Forbidden` from member check-in endpoints), while `MEMBER` accounts are strictly confined to `/home`, `/checkin`, `/attendance`, `/machines`, and `/profile`.
+- **Facility Entrance Check-In QR Generator (`EntranceQrModal`)**: Accessible from `/admin` and `/admin/attendance`, allowing staff to display, download SVG, or print a branded A4 reception check-in poster (`BOXINN-ENTRANCE-YELAHANKA`).
+- **In-App Camera & Auto Deep-Link QR Check-In (`/checkin`)**: Supports browser camera QR scanning (`BarcodeDetector` + fallback), native phone camera deep-links (`/checkin?code=BOXINN-ENTRANCE-YELAHANKA&auto=1`), and 1-tap check-in.
+- **Live Gym Floor Occupancy (`/api/attendance/occupancy`)**: Displays real-time count of active members currently on the floor (within their 3-hour active check-in window) on both `/home` and `/admin`.
+- **Multi-Exercise Equipment Manager & Printable QR Stickers (`/admin/machines`)**: Full CRUD for gym machines and multiple exercises per station (`M-CABLE-01`, `M-ROW-01`, `M-BIKE-01`, `M-SKI-01`, `M-OLY-01`), automatic YouTube/Shorts/Vimeo embed URL normalization, in-portal video preview modal, and printable SVG QR sticker sheets.
+- **1-Click WhatsApp Renewal Reminders (`/admin` & `/admin/members`)**: Generates pre-filled personalized `wa.me` renewal reminders for expiring/expired members alongside 1-click `+30d` audited renewals.
 
 ---
 
 ## 4. Test Suites & Verification
 
-The application includes comprehensive unit and integration test suites covering all business rules and security guarantees:
+The application includes comprehensive unit and integration test suites (78 total tests) covering all business rules and security guarantees:
 
 ```bash
 # 1. Run Domain Unit Tests (39 tests, pure domain rules, no database)
 npm test
 
-# 2. Run Database Integration Tests (36 tests, PostgreSQL transactions & API flows)
+# 2. Run Database Integration Tests (39 tests, PostgreSQL transactions, concurrency & E2E auth journeys)
 npm run test:integration
 
 # 3. TypeScript Typecheck
-npx tsc --noEmit
+npm run typecheck
 
-# 4. Production Next.js Build
+# 4. Production Next.js Build & Start
 npm run build
+npm run start
 ```
 
 ### Test Coverage Highlights
