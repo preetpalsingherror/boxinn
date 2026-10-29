@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <rect width="256" height="256" rx="44" fill="#0A0B0E" stroke="#CADA03" stroke-width="8"/>
+  <!-- Bold B with Volt Dumbbell -->
+  <path d="M26 48 H84 C102 48 112 58 112 74 C112 86 105 95 94 99 C107 103 115 113 115 127 C115 145 103 156 84 156 H26 Z" fill="#F8F9FA"/>
+  <!-- Volt Dumbbell Negative Space inside B -->
+  <rect x="44" y="64" width="28" height="16" rx="3" fill="#CADA03"/>
+  <rect x="53" y="78" width="10" height="48" fill="#CADA03"/>
+  <rect x="44" y="124" width="28" height="16" rx="3" fill="#CADA03"/>
+  <!-- X with ESTD 2026 -->
+  <path d="M110 48 H134 L148 80 L162 48 H186 L162 102 L188 156 H164 L148 122 L132 156 H108 L134 102 Z" fill="#F8F9FA"/>
+  <text x="148" y="100" text-anchor="middle" fill="#CADA03" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="11" letter-spacing="1">ESTD</text>
+  <text x="148" y="112" text-anchor="middle" fill="#CADA03" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="11" letter-spacing="1">2026</text>
+  <!-- N -->
+  <path d="M188 48 H208 L224 108 V48 H242 V156 H222 L206 96 V156 H188 Z" fill="#F8F9FA"/>
+  <!-- Bottom Volt Banner -->
+  <rect x="24" y="174" width="208" height="36" rx="8" fill="#CADA03"/>
+  <text x="128" y="198" text-anchor="middle" fill="#0A0B0E" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="22" letter-spacing="3">BOX INN</text>
+  <text x="128" y="229" text-anchor="middle" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="10" letter-spacing="1.8">RISE ABOVE THE AVERAGE</text>
+</svg>

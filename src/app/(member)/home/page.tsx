@@ -120,19 +120,39 @@ export default function MemberHomePage() {
 
   return (
     <div className="space-y-5">
-      {/* Greeting Banner */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[#F8F9FA]">
-            Welcome back, {user?.fullName.split(' ')[0] || 'Athlete'}
-          </h1>
-          <p className="text-xs text-[#94A3B8] font-medium mt-0.5">
-            BOX INN Training Facility • Yelahanka
-          </p>
-        </div>
-        <div className="px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-[11px] font-bold text-emerald-400 flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>ENROLLED</span>
+      {/* Branded Athlete Hero Card */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#14171F] via-[#14171F] to-[#1D222E] border border-[#2A303C] p-4 sm:p-5 shadow-xl">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#CADA03] via-[#CADA03]/60 to-transparent" />
+        <img
+          src="/brand/boxinn-stacked-dark.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none select-none absolute -right-3 -bottom-3 h-28 w-auto opacity-[0.06] object-contain"
+        />
+        <div className="relative flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3.5">
+            <div className="hidden sm:flex items-center justify-center w-12 h-12 rounded-xl bg-[#0A0B0E] border border-[#CADA03]/30 p-1.5 shadow-inner shrink-0">
+              <img
+                src="/brand/bxn-badge.svg"
+                alt="BOX INN"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-[#CADA03] mb-0.5">
+                <span>BOX INN • Yelahanka</span>
+                <span>•</span>
+                <span className="text-[#94A3B8]">Rise Above The Average</span>
+              </div>
+              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[#F8F9FA]">
+                Welcome back, {user?.fullName.split(' ')[0] || 'Athlete'}
+              </h1>
+            </div>
+          </div>
+          <div className="px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-[11px] font-bold text-emerald-400 flex items-center gap-1.5 shrink-0">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>ENROLLED</span>
+          </div>
         </div>
       </div>
 

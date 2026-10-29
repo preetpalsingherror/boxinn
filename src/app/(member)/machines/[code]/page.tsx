@@ -141,17 +141,25 @@ export default function MachineDetailPage({
       </div>
 
       {/* Machine Overview Card */}
-      <div className="bg-[#14171F] border border-[#2A303C] rounded-2xl p-5 shadow-xl space-y-3">
-        <div className="flex items-start justify-between">
+      <div className="relative overflow-hidden bg-[#14171F] border border-[#2A303C] rounded-2xl p-5 shadow-xl space-y-3">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#CADA03] via-[#CADA03]/60 to-transparent" />
+        <img
+          src="/brand/boxinn-stacked-dark.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none select-none absolute -right-4 -bottom-4 h-28 w-auto opacity-[0.06] object-contain"
+        />
+        <div className="relative flex items-start justify-between">
           <div>
-            <span className="text-[10px] font-black uppercase tracking-wider text-[#CADA03]">
-              {machine.category}
-            </span>
-            <h1 className="text-xl font-black text-[#F8F9FA] mt-0.5">
+            <div className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-[#CADA03]">
+              <img src="/brand/bxn-badge.svg" alt="BXN" className="w-4 h-4 object-contain" />
+              <span>{machine.category}</span>
+            </div>
+            <h1 className="text-xl font-black text-[#F8F9FA] mt-1">
               {machine.name}
             </h1>
           </div>
-          <div className="p-2.5 rounded-xl bg-[#1D222E] text-[#CADA03] border border-[#CADA03]/30">
+          <div className="p-2.5 rounded-xl bg-[#1D222E] text-[#CADA03] border border-[#CADA03]/30 shrink-0">
             <Dumbbell className="w-6 h-6" />
           </div>
         </div>

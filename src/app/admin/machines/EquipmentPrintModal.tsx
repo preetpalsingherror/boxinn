@@ -165,20 +165,17 @@ export function EquipmentPrintModal({ isOpen, onClose, machines }: EquipmentPrin
                 >
                   {/* Gym Brand Header */}
                   <div className="flex items-center justify-between border-b border-[#2A303C] print:border-neutral-200 pb-3 mb-3">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2.5">
                       <img
-                        src="/brand/bxn-mark.png"
-                        alt="BXN"
-                        className="h-7 w-auto object-contain filter drop-shadow-[0_2px_8px_rgba(202,218,3,0.3)] print:filter-none"
+                        src="/brand/boxinn-horizontal-dark.png"
+                        alt="BOX INN"
+                        className="h-8 w-auto object-contain print:hidden drop-shadow-[0_2px_8px_rgba(202,218,3,0.25)]"
                       />
-                      <div>
-                        <div className="text-xs font-black tracking-tight text-[#F8F9FA] print:text-black uppercase">
-                          BOX INN GYM
-                        </div>
-                        <div className="text-[9px] font-bold tracking-widest text-[#CADA03] print:text-neutral-600 uppercase">
-                          Rise Above The Average
-                        </div>
-                      </div>
+                      <img
+                        src="/brand/boxinn-horizontal.png"
+                        alt="BOX INN"
+                        className="hidden print:block h-8 w-auto object-contain"
+                      />
                     </div>
 
                     <div className="text-right">

@@ -6,8 +6,8 @@ export const metadata: Metadata = {
   description: 'Private mobile-first web companion for enrolled members of BOX INN gym.',
   manifest: '/manifest.json',
   icons: {
-    icon: '/brand/bxn-mark.png',
-    apple: '/brand/bxn-mark.png',
+    icon: '/brand/bxn-badge.svg',
+    apple: '/brand/boxinn-stacked-dark.png',
   },
   appleWebApp: {
     capable: true,

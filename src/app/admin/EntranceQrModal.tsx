@@ -150,6 +150,7 @@ export function EntranceQrModal({ isOpen, onClose }: EntranceQrModalProps) {
         </head>
         <body>
           <div class="poster">
+            <img src="/brand/boxinn-horizontal-dark.png" alt="BOX INN" style="height: 44px; width: auto; margin: 0 auto 14px auto; display: block;" />
             <div class="badge">BOX INN • Yelahanka Facility</div>
             <h1>Athlete Entrance Check-In</h1>
             <p class="sub">Scan Upon Arrival to Log Attendance & Daily Streak</p>
@@ -180,6 +181,12 @@ export function EntranceQrModal({ isOpen, onClose }: EntranceQrModalProps) {
         >
           <X className="w-5 h-5" />
         </button>
+
+        <img
+          src="/brand/boxinn-horizontal-dark.png"
+          alt="BOX INN"
+          className="h-9 w-auto object-contain mx-auto mb-3 drop-shadow-[0_2px_10px_rgba(202,218,3,0.2)]"
+        />
 
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#CADA03]/15 border border-[#CADA03]/40 text-[10px] font-black uppercase tracking-widest text-[#CADA03] mb-2">
           <QrCode className="w-3.5 h-3.5" />

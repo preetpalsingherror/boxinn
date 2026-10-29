@@ -89,34 +89,57 @@ export default function AdminOverviewPage() {
 
   return (
     <div className="space-y-6">
-      {/* Title & Quick Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-black tracking-tight text-[#F8F9FA]">
-            Facility Operations Overview
-          </h1>
-          <p className="text-xs text-[#94A3B8] mt-0.5">
-            BOX INN Yelahanka • Local Gym Date: <strong className="text-[#F8F9FA] font-mono">{stats?.gymDate}</strong>
-          </p>
-        </div>
+      {/* Branded Command Center Header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#14171F] via-[#14171F] to-[#1D222E] border border-[#2A303C] p-5 shadow-xl">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#CADA03] via-[#CADA03]/60 to-transparent" />
+        <img
+          src="/brand/boxinn-stacked-dark.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none select-none absolute -right-4 -bottom-4 h-32 w-auto opacity-[0.06] object-contain"
+        />
+        <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="hidden sm:flex items-center justify-center w-13 h-13 rounded-xl bg-[#0A0B0E] border border-[#CADA03]/40 p-1.5 shadow-inner shrink-0">
+              <img
+                src="/brand/bxn-badge.svg"
+                alt="BOX INN"
+                className="w-10 h-10 object-contain"
+              />
+            </div>
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-[#CADA03] mb-0.5">
+                <span>BOX INN • Yelahanka Command Desk</span>
+                <span>•</span>
+                <span className="text-[#94A3B8]">ESTD 2026</span>
+              </div>
+              <h1 className="text-2xl font-black tracking-tight text-[#F8F9FA]">
+                Facility Operations Overview
+              </h1>
+              <p className="text-xs text-[#94A3B8] mt-0.5">
+                Rise Above The Average • Local Gym Date: <strong className="text-[#CADA03] font-mono">{stats?.gymDate}</strong>
+              </p>
+            </div>
+          </div>
 
-        <div className="flex items-center gap-2.5">
-          <button
-            onClick={() => setShowEntranceQr(true)}
-            className="px-4 py-2.5 bg-[#1D222E] hover:bg-[#2A303C] border border-[#CADA03]/40 text-[#F8F9FA] hover:text-[#CADA03] font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition uppercase"
-            title="Generate or print the reception desk check-in QR poster for members"
-          >
-            <QrCode className="w-4 h-4 text-[#CADA03]" />
-            <span>Entrance Check-In QR</span>
-          </button>
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={() => setShowEntranceQr(true)}
+              className="px-4 py-2.5 bg-[#0A0B0E] hover:bg-[#1D222E] border border-[#CADA03]/50 text-[#F8F9FA] hover:text-[#CADA03] font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition uppercase shadow-sm"
+              title="Generate or print the reception desk check-in QR poster for members"
+            >
+              <QrCode className="w-4 h-4 text-[#CADA03]" />
+              <span>Entrance Check-In QR</span>
+            </button>
 
-          <Link
-            href="/admin/members?invite=true"
-            className="px-4 py-2.5 bg-[#CADA03] hover:bg-[#B8C702] text-[#0A0B0E] font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(202,218,3,0.3)] transition uppercase"
-          >
-            <UserPlus className="w-4 h-4 text-[#0A0B0E]" />
-            <span>Invite New Member</span>
-          </Link>
+            <Link
+              href="/admin/members?invite=true"
+              className="px-4 py-2.5 bg-[#CADA03] hover:bg-[#B8C702] text-[#0A0B0E] font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(202,218,3,0.3)] transition uppercase"
+            >
+              <UserPlus className="w-4 h-4 text-[#0A0B0E]" />
+              <span>Invite New Member</span>
+            </Link>
+          </div>
         </div>
       </div>
 

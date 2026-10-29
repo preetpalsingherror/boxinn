@@ -1,8 +1,35 @@
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="public/brand/boxinn-stacked-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="public/brand/boxinn-stacked.png">
+  <img alt="BOX INN — Rise Above The Average" src="public/brand/boxinn-stacked-dark.png" width="320">
+</picture>
+
+<br/>
+<br/>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="public/brand/boxinn-horizontal-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="public/brand/boxinn-horizontal.png">
+  <img alt="BOX INN Horizontal Banner" src="public/brand/boxinn-horizontal.png" width="540">
+</picture>
+
+<br/>
+<br/>
+
+[![Gym Facility](https://img.shields.io/badge/FACILITY-BOX_INN_YELAHANKA-CADA03?style=for-the-badge&labelColor=0A0B0E&logoColor=CADA03)](https://provision-farms-reviewed-launch.trycloudflare.com)
+[![Motto](https://img.shields.io/badge/ESTD_2026-RISE_ABOVE_THE_AVERAGE-F8F9FA?style=for-the-badge&labelColor=14171F)](https://provision-farms-reviewed-launch.trycloudflare.com)
+[![Tests](https://img.shields.io/badge/TESTS-78%2F78_PASSING-10B981?style=for-the-badge&labelColor=0A0B0E)](tests/)
+[![Stack](https://img.shields.io/badge/STACK-NEXT.JS_15_%E2%80%A2_POSTGRESQL_18-38BDF8?style=for-the-badge&labelColor=0A0B0E)](package.json)
+
 # 🥊 BOX INN Companion — Building Software for My Local Gym in Public
 
-> **By Preetpal Singh** — *3rd Year Computer Science & Engineering Student*  
-> **Built for:** **BOX INN Fitness & Conditioning**, Puttenahalli, Yelahanka, Bengaluru (`Asia/Kolkata`)  
-> **Live Demo URL:** [https://provision-farms-reviewed-launch.trycloudflare.com](https://provision-farms-reviewed-launch.trycloudflare.com)
+**By Preetpal Singh** — *3rd Year Computer Science & Engineering Student*  
+**Built for:** **BOX INN Fitness & Conditioning**, Puttenahalli, Yelahanka, Bengaluru (`Asia/Kolkata`)  
+**Live Demo URL:** [**https://provision-farms-reviewed-launch.trycloudflare.com**](https://provision-farms-reviewed-launch.trycloudflare.com)
+
+</div>
 
 ---
 
