@@ -14,7 +14,11 @@
     "test:integration": "node --experimental-strip-types --test tests/integration/**/*.test.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "node --experimental-strip-types prisma/seed.ts"
+    "prisma:seed": "node --experimental-strip-types prisma/seed.ts",
+    "vercel-build": "prisma generate && prisma db push && node --experimental-strip-types prisma/seed.ts && next build"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   },
   "prisma": {
     "seed": "node --experimental-strip-types prisma/seed.ts"
